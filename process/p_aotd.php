@@ -24,7 +24,7 @@ try {
         Class_db::getInstance()->db_connect();        
         Class_db::getInstance()->db_beginTransaction();
         $fn_task = new Class_task();          
-        if ($_POST['funct'] == 'save_lab') {           
+        if ($_POST['funct'] == 'save_lab') {       
             if (empty($_POST['mle_lab_id']))       throw new Exception('(ErrCode:6802) [' . __LINE__ . '] - Parameter lab_id empty.');
             if (empty($_POST['mle_lab_name']))     throw new Exception('(ErrCode:6803) [' . __LINE__ . '] - Field Laboratory Name empty.', 32);
             $result = Class_db::getInstance()->db_update('aotd_lab', array('lab_name'=>$_POST['mle_lab_name'], 'lab_desc'=>$_POST['mle_lab_desc'], 'lab_head_unit'=>$_POST['mle_lab_head_unit'], 'lab_quality_manager'=>$_POST['mle_lab_quality_manager'],
