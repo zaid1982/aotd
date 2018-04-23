@@ -13,7 +13,7 @@
         <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
             <h1 class="page-title txt-color-blueDark">
                 <i class="fa fa-flask fa-fw "></i> 
-                Analytical Testing Services
+                Analytical Testing Services 
                 <span>> 
                     Sample Manager
                 </span>
