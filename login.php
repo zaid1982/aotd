@@ -38,8 +38,8 @@ $activation_code = isset($_GET['activationCode']) ? $_GET['activationCode'] : ''
         <link rel="stylesheet" type="text/css" media="screen" href="css/style.css">
 
         <!-- #FAVICONS -->
-        <link rel="shortcut icon" href="img/favicon/favicon.ico" type="image/x-icon">
-        <link rel="icon" href="img/favicon/favicon.ico" type="image/x-icon">
+        <!-- <link rel="shortcut icon" href="img/favicon/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="img/favicon/favicon.ico" type="image/x-icon"> -->
 
         <!-- #GOOGLE FONT -->
         <!--<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">-->

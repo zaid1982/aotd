@@ -5,7 +5,7 @@
         </span> 
     </span>
     <ol class="breadcrumb">
-        <li>Home</li><li>AOTD</li><li>Analytical Testing Services</li><li>Sample Manager</li>
+        <li>Home</li><li>AOTD</li><li>Analytical Testing Services</li><li>Sample Managers</li> 
     </ol>
 </div> 
 <div id="content">
