@@ -430,6 +430,8 @@ class Class_sql {
                 $sql = "SELECT 
                     atsCert_status, COUNT(*) AS total
                 FROM ats_sample_log
+                LEFT JOIN wf_transaction ON wf_transaction.wfTrans_id = ats_sample_log.wfTrans_id
+                WHERE wf_transaction.wfTrans_id IS NULL OR wf_transaction.wfTrans_status <> 2 OR (wf_transaction.wfTrans_status = 2 AND wf_transaction.wfTrans_createdBy = [user_id])
                 GROUP BY atsCert_status";
             } else if ($title == 'dt_ats_cert') {
                 $sql = "SELECT 
@@ -456,7 +458,9 @@ class Class_sql {
                 FROM ats_sample_log
                 LEFT JOIN aotd_client_info ON aotd_client_info.client_id = ats_sample_log.client_id
                 LEFT JOIN ref_status ON ref_status.status_id = ats_sample_log.atsCert_status
-                LEFT JOIN wf_task ON wf_task.wfTrans_id = ats_sample_log.wfTrans_id AND wf_task.wfTask_partition = 1 AND wf_task.wfTaskType_id = 1 AND wf_task.wfTask_status = 2";
+                LEFT JOIN wf_task ON wf_task.wfTrans_id = ats_sample_log.wfTrans_id AND wf_task.wfTask_partition = 1 AND wf_task.wfTaskType_id = 1 AND wf_task.wfTask_status = 2
+                LEFT JOIN wf_transaction ON wf_transaction.wfTrans_id = ats_sample_log.wfTrans_id
+                WHERE wf_transaction.wfTrans_id IS NULL OR wf_transaction.wfTrans_status <> 2 OR (wf_transaction.wfTrans_status = 2 AND wf_transaction.wfTrans_createdBy = [user_id])";
             } else if ($title == 'vw_ats_cert') {
                 $sql = "SELECT 
                     aotd_client_info.client_organisation AS client_organisation,
@@ -653,6 +657,8 @@ class Class_sql {
                 $sql = "SELECT 
                     bdtRep_status, COUNT(*) AS total
                 FROM bdt_sample_log
+                LEFT JOIN wf_transaction ON wf_transaction.wfTrans_id = bdt_sample_log.wfTrans_id
+                WHERE wf_transaction.wfTrans_id IS NULL OR wf_transaction.wfTrans_status <> 2 OR (wf_transaction.wfTrans_status = 2 AND wf_transaction.wfTrans_createdBy = [user_id])
                 GROUP BY bdtRep_status";
             } else if ($title == 'dt_bdt_cert') {
                 $sql = "SELECT 
@@ -676,7 +682,9 @@ class Class_sql {
                 FROM bdt_sample_log
                 LEFT JOIN aotd_client_info ON aotd_client_info.client_id = bdt_sample_log.client_id
                 LEFT JOIN ref_status ON ref_status.status_id = bdt_sample_log.bdtRep_status
-                LEFT JOIN wf_task ON wf_task.wfTrans_id = bdt_sample_log.wfTrans_id AND wf_task.wfTask_partition = 1 AND wf_task.wfTaskType_id = 11 AND wf_task.wfTask_status = 2";
+                LEFT JOIN wf_task ON wf_task.wfTrans_id = bdt_sample_log.wfTrans_id AND wf_task.wfTask_partition = 1 AND wf_task.wfTaskType_id = 11 AND wf_task.wfTask_status = 2
+                LEFT JOIN wf_transaction ON wf_transaction.wfTrans_id = bdt_sample_log.wfTrans_id
+                WHERE wf_transaction.wfTrans_id IS NULL OR wf_transaction.wfTrans_status <> 2 OR (wf_transaction.wfTrans_status = 2 AND wf_transaction.wfTrans_createdBy = [user_id])";
             } else if ($title == 'dt_bdt_incoming') {
                 $sql = "SELECT 
                     wf_task.wfTask_id AS wfTask_id,
@@ -752,6 +760,8 @@ class Class_sql {
                 $sql = "SELECT 
                     ectRep_status, COUNT(*) AS total
                 FROM ect_sample_log
+                LEFT JOIN wf_transaction ON wf_transaction.wfTrans_id = ect_sample_log.wfTrans_id
+                WHERE wf_transaction.wfTrans_id IS NULL OR wf_transaction.wfTrans_status <> 2 OR (wf_transaction.wfTrans_status = 2 AND wf_transaction.wfTrans_createdBy = [user_id]) 
                 GROUP BY ectRep_status";
             } else if ($title == 'dt_ect_cert') {
                 $sql = "SELECT 
@@ -775,7 +785,9 @@ class Class_sql {
                 FROM ect_sample_log
                 LEFT JOIN aotd_client_info ON aotd_client_info.client_id = ect_sample_log.client_id
                 LEFT JOIN ref_status ON ref_status.status_id = ect_sample_log.ectRep_status
-                LEFT JOIN wf_task ON wf_task.wfTrans_id = ect_sample_log.wfTrans_id AND wf_task.wfTask_partition = 1 AND wf_task.wfTaskType_id = 21 AND wf_task.wfTask_status = 2";
+                LEFT JOIN wf_task ON wf_task.wfTrans_id = ect_sample_log.wfTrans_id AND wf_task.wfTask_partition = 1 AND wf_task.wfTaskType_id = 21 AND wf_task.wfTask_status = 2
+                LEFT JOIN wf_transaction ON wf_transaction.wfTrans_id = ect_sample_log.wfTrans_id
+                WHERE wf_transaction.wfTrans_id IS NULL OR wf_transaction.wfTrans_status <> 2 OR (wf_transaction.wfTrans_status = 2 AND wf_transaction.wfTrans_createdBy = [user_id])";
             } else if ($title == 'dt_ect_incoming') {
                 $sql = "SELECT 
                     wf_task.wfTask_id AS wfTask_id,
@@ -848,6 +860,8 @@ class Class_sql {
                 $sql = "SELECT 
                     phyRep_status, COUNT(*) AS total
                 FROM phy_sample_log
+                LEFT JOIN wf_transaction ON wf_transaction.wfTrans_id = phy_sample_log.wfTrans_id
+                WHERE wf_transaction.wfTrans_id IS NULL OR wf_transaction.wfTrans_status <> 2 OR (wf_transaction.wfTrans_status = 2 AND wf_transaction.wfTrans_createdBy = [user_id])
                 GROUP BY phyRep_status";
             } else if ($title == 'dt_phy_cert') {
                 $sql = "SELECT 
@@ -871,7 +885,9 @@ class Class_sql {
                 FROM phy_sample_log
                 LEFT JOIN aotd_client_info ON aotd_client_info.client_id = phy_sample_log.client_id
                 LEFT JOIN ref_status ON ref_status.status_id = phy_sample_log.phyRep_status
-                LEFT JOIN wf_task ON wf_task.wfTrans_id = phy_sample_log.wfTrans_id AND wf_task.wfTask_partition = 1 AND wf_task.wfTaskType_id = 31 AND wf_task.wfTask_status = 2";
+                LEFT JOIN wf_task ON wf_task.wfTrans_id = phy_sample_log.wfTrans_id AND wf_task.wfTask_partition = 1 AND wf_task.wfTaskType_id = 31 AND wf_task.wfTask_status = 2
+                LEFT JOIN wf_transaction ON wf_transaction.wfTrans_id = phy_sample_log.wfTrans_id
+                WHERE wf_transaction.wfTrans_id IS NULL OR wf_transaction.wfTrans_status <> 2 OR (wf_transaction.wfTrans_status = 2 AND wf_transaction.wfTrans_createdBy = [user_id])";
             } else if ($title == 'dt_phy_incoming') {
                 $sql = "SELECT 
                     wf_task.wfTask_id AS wfTask_id,
@@ -976,6 +992,8 @@ class Class_sql {
                 $sql = "SELECT 
                     effRep_status, COUNT(*) AS total
                 FROM eff_sample_log
+                LEFT JOIN wf_transaction ON wf_transaction.wfTrans_id = eff_sample_log.wfTrans_id
+                WHERE wf_transaction.wfTrans_id IS NULL OR wf_transaction.wfTrans_status <> 2 OR (wf_transaction.wfTrans_status = 2 AND wf_transaction.wfTrans_createdBy = [user_id])
                 GROUP BY effRep_status";
             } else if ($title == 'dt_eff_cert') {
                 $sql = "SELECT 
@@ -999,7 +1017,9 @@ class Class_sql {
                 FROM eff_sample_log
                 LEFT JOIN aotd_client_info ON aotd_client_info.client_id = eff_sample_log.client_id
                 LEFT JOIN ref_status ON ref_status.status_id = eff_sample_log.effRep_status
-                LEFT JOIN wf_task ON wf_task.wfTrans_id = eff_sample_log.wfTrans_id AND wf_task.wfTask_partition = 1 AND wf_task.wfTaskType_id = 41 AND wf_task.wfTask_status = 2";
+                LEFT JOIN wf_task ON wf_task.wfTrans_id = eff_sample_log.wfTrans_id AND wf_task.wfTask_partition = 1 AND wf_task.wfTaskType_id = 41 AND wf_task.wfTask_status = 2
+                LEFT JOIN wf_transaction ON wf_transaction.wfTrans_id = eff_sample_log.wfTrans_id
+                WHERE wf_transaction.wfTrans_id IS NULL OR wf_transaction.wfTrans_status <> 2 OR (wf_transaction.wfTrans_status = 2 AND wf_transaction.wfTrans_createdBy = [user_id])";
             } else if ($title == 'dt_eff_incoming') {
                 $sql = "SELECT 
                     wf_task.wfTask_id AS wfTask_id,

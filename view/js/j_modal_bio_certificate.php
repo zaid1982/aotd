@@ -23,12 +23,6 @@
     
     $(document).ready(function () {
         
-        $('#form_mbcr_form').bootstrapValidator({
-            excluded: ':disabled',
-            fields: { 
-            }
-        });
-        
         $('#mbcr_snote_bdtLab_result').summernote({
             height: 150,
             toolbar: [
@@ -47,6 +41,38 @@
 //                }
 //            }
         });   
+        
+        $('#mbcr_snote_wfTask_remark').summernote({
+            height: 150,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'italic', 'underline', 'clear']],
+                ['fontname', ['fontname']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['height', ['height']],
+                ['table', ['table']]
+            ]
+        });  
+        
+        $('#form_mbcr_form').bootstrapValidator({
+            excluded: ':disabled',
+            fields: { 
+            }
+        });
+        
+        $('#form_mbcr_action').bootstrapValidator({
+            excluded: ':disabled',
+            fields: { 
+                mbcr_action : {
+                    validators : {
+                        notEmpty: {
+                            message: 'Final Test Status is required'
+                        }                     
+                    }
+                }                
+            }
+        });
         
         var datatable_mbcr_sample = undefined; 
         mbcr_otable_sample = $('#datatable_mbcr_sample').DataTable({
@@ -73,6 +99,8 @@
                     for(var j=0;j<visibleRows.length;j++){
                         var bootstrapValidator = $("#form_mbcr_form").data('bootstrapValidator');
                         bootstrapValidator.addField('mbcr_bdtLab_sampleCode_'+visibleRows[j].bdtLab_code, {validators:{notEmpty:{message:'Required'},stringLength:{max:100, message:'Max 100 words'}}});
+                        bootstrapValidator.addField('mbcr_bdtLab_thod_'+visibleRows[j].bdtLab_code, {validators:{notEmpty:{message:'Required'},numeric:{max:100, message:'Invalid number', thousandsSeparator:'', decimalSeparator: '.'}}});
+                        bootstrapValidator.addField('mbcr_bdtLab_result_'+visibleRows[j].bdtLab_code, {validators:{notEmpty:{message:'Required'},stringLength:{max:100, message:'Max 255 words'}}});
                     }
                 }
             },
@@ -80,11 +108,33 @@
                 [
                     {mData: null},
                     {mData: 'bdtLab_code'},
-                    {mData: 'bdtLab_sampleCode',
+                    {mData: 'bdtLab_sampleCode', sClass: 'text-center',
                         mRender: function (data, type, row) {
                             $label = '<div class="form-group margin-bottom-0" style="width:100%">' +
                                 '<input type="text" class="form-control" style="width:100%" name="mbcr_bdtLab_sampleCode_'+row.bdtLab_code+'" id="mbcr_bdtLab_sampleCode_'+row.bdtLab_code+'" value="'+(data!=null?data:'')+'"/>' +
                                 '</div>';
+                            return $label;
+                        }
+                    },
+                    {mData: 'bdtLab_thod', sClass: 'text-center',
+                        mRender: function (data, type, row) {
+                            $label = '<div class="form-group margin-bottom-0" style="width:100%">' +
+                                '<input type="text" class="form-control" style="width:100%" name="mbcr_bdtLab_thod_'+row.bdtLab_code+'" id="mbcr_bdtLab_thod_'+row.bdtLab_code+'" value="'+(data!=null?data:'')+'"/>' +
+                                '</div>';
+                            return $label;
+                        }
+                    },
+                    {mData: 'bdtLab_result', sClass: 'text-center',
+                        mRender: function (data, type, row) {
+                            $label = '<div class="form-group margin-bottom-0" style="width:100%">' +
+                                '<input type="text" class="form-control" style="width:100%" name="mbcr_bdtLab_result_'+row.bdtLab_code+'" id="mbcr_bdtLab_result_'+row.bdtLab_code+'" value="'+(data!=null?data:'')+'"/>' +
+                                '</div>';
+                            return $label;
+                        }
+                    },
+                    {mData: "bdtRep_no", sClass: 'text-center',
+                        mRender: function (data, type, row) {
+                            $label = '<button type="button" class="btn btn-primary btn-xs" title="Print Barcode" onclick="getBarCode(\'' + row.bdtLab_code + '\',\'' + row.bdtLab_barCode + '\')"><span class="glyphicon glyphicon-print"></span></button>';
                             return $label;
                         }
                     }
@@ -335,6 +385,8 @@
                     $.each(data_mbcr_sample, function(u){
                         var bootstrapValidator = $("#form_mbcr_form").data('bootstrapValidator');
                         bootstrapValidator.removeField('mbcr_bdtLab_sampleCode_'+data_mbcr_sample[u].bdtLab_code); 
+                        bootstrapValidator.removeField('mbcr_bdtLab_thod_'+data_mbcr_sample[u].bdtLab_code); 
+                        bootstrapValidator.removeField('mbcr_bdtLab_result_'+data_mbcr_sample[u].bdtLab_code); 
                     });
                 }
             }
@@ -344,9 +396,10 @@
             $('#modal_waiting').on('shown.bs.modal', function(e){   
                 if (mbcr_load_type == 2 && mbcr_otable == 'blg') {
                     $('#mbcr_funct').val('save_bdt_sample_info');
-                    if (f_submit_forms('form_mbcr,#form_mbcr_form', 'p_aotd', 'Data successfully saved.')) {
+                    $('#mbcr_wfTask_remark').val($('[name="mbcr_snote_wfTask_remark"]').summernote('code'));
+                    if (f_submit_forms('form_mbcr,#form_mbcr_form,#form_mbcr_action', 'p_aotd', 'Data successfully saved.')) {
                         data_mbcr_sample = f_get_general_info_multiple('bdt_sample_info', {bdtRep_no:$('#mbcr_bdtRep_no').val()}, {}, '', 'bdtLab_code');
-                        f_dataTable_draw(mbcr_otable_sample, data_mbcr_sample, 'datatable_mbcr_sample', 3);
+                        f_dataTable_draw(mbcr_otable_sample, data_mbcr_sample, 'datatable_mbcr_sample', 6);
                     }
                 }
                 $('#modal_waiting').modal('hide');
@@ -372,7 +425,7 @@
                             $('#mbcr_funct').val('save_bdt_sample_info');
                             if (f_submit_forms('form_mbcr,#form_mbcr_form', 'p_aotd')) {
                                 data_mbcr_sample = f_get_general_info_multiple('bdt_sample_info', {bdtRep_no:$('#mbcr_bdtRep_no').val()}, {}, '', 'bdtLab_code');
-                                f_dataTable_draw(mbcr_otable_sample, data_mbcr_sample, 'datatable_mbcr_sample', 3);
+                                f_dataTable_draw(mbcr_otable_sample, data_mbcr_sample, 'datatable_mbcr_sample', 6);
                                 if (f_submit($('#mbcr_wfTask_id').val(), $('#mbcr_wfTaskType_id').val(), '10', 'Sample Registration successfully submitted.', '', '', '', '', 'bdtRep_no', $('#mbcr_bdtRep_no').val())) {
                                     f_blg_summary();
                                     f_blg_process (blg_summary_id);
@@ -406,10 +459,11 @@
     
     function f_mbcr_load_certificate(load_type, bdtRep_no, wfTask_id, otable) {
         $('#modal_waiting').on('shown.bs.modal', function(e){
-            $('#form_mbcr, #form_mbcr_form, #form_mbcr_workbook').trigger('reset'); 
+            $('#form_mbcr, #form_mbcr_form, #form_mbcr_workbook, #form_mbcr_action').trigger('reset'); 
             $('#form_mbcr_form').bootstrapValidator('resetForm', true); 
             $('#form_mbcr_workbook').bootstrapValidator('resetForm', true); 
-            $('#form_mbcr_workbook').find('input, textarea, select').prop('disabled',false);
+            $('#form_mbcr_action').bootstrapValidator('resetForm', true); 
+            $('#form_mbcr_workbook, #form_mbcr_action').find('input, textarea, select').prop('disabled',false);
             mbcr_otable = otable;
             mbcr_load_type = load_type;
             $('.mbcr_viewOnly').prop('disabled',true);
@@ -451,13 +505,17 @@
                 if (mbcr_otable == 'blg') {
                     $('.mbcr_div_sample').show();
                     data_mbcr_sample = f_get_general_info_multiple('bdt_sample_info', {bdtRep_no:bdtRep_no}, {}, '', 'bdtLab_code');
-                    f_dataTable_draw(mbcr_otable_sample, data_mbcr_sample, 'datatable_mbcr_sample', 3);
+                    f_dataTable_draw(mbcr_otable_sample, data_mbcr_sample, 'datatable_mbcr_sample', 6);
+                    if (wf_task.wfTask_statusSave != null)
+                        $("input[name='mbcr_action'][value="+wf_task.wfTask_statusSave+"]").prop('checked', true);
+                    $('#mbcr_snote_wfTask_remark').summernote('code', wf_task.wfTask_remark);
                 } else if (mbcr_otable == 'bwb') {    
                     mbcr_otable_workSummary.columns(5).visible(true);
                 }
             } else if (mbcr_load_type == 3) {
-                $('#form_mbcr_workbook').find('input, textarea, select').prop('disabled',true);
+                $('#form_mbcr_workbook, #form_mbcr_action').find('input, textarea, select').prop('disabled',true);
                 $('#mbcr_snote_bdtLab_result').summernote('disable');
+                $('#mbcr_snote_wfTask_remark').summernote('disable');
             }
             data_mbcr_history = f_get_general_info_multiple('dt_task_history', {wfTrans_id:(cert_info.wfTrans_id!=null?cert_info.wfTrans_id:'0')}, '', '', 'wfTask_id');
             f_dataTable_draw(mbcr_otable_history, data_mbcr_history, 'datatable_mbcr_history', 6);

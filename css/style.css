@@ -67,6 +67,8 @@
 .process-row:before{top:30px; left: 10%; bottom:0;position:absolute; content:" "; width:80%; height:1px;background-color:#ccc;z-order:0}
 .process-row2{display:table-row}
 .process-row2:before{top:30px; left: 15%; bottom:0;position:absolute; content:" "; width:70%; height:1px;background-color:#ccc;z-order:0}
+.process-row3{display:table-row}
+.process-row3:before{top:30px; left: 22%; bottom:0;position:absolute; content:" "; width:56%; height:1px;background-color:#ccc;z-order:0}
 .text-italic{font-style: italic !important}
 .minHeight{min-height: 400px}
 .div-fixHeight {

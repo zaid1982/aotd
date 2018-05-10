@@ -354,9 +354,12 @@ try {
             if (empty($_POST['mbcr_bdtRep_no']))    throw new Exception('(ErrCode:6833) [' . __LINE__ . '] - Parameter bdtRep_no empty.');
             $arr_sample_info = Class_db::getInstance()->db_select('bdt_sample_info', array('bdtRep_no'=>$_POST['mbcr_bdtRep_no']), NULL, NULL, 1);
             foreach ($arr_sample_info as $sample_info) {
-                Class_db::getInstance()->db_update('bdt_sample_info', array('bdtLab_sampleCode'=>$_POST['mbcr_bdtLab_sampleCode_'.$sample_info['bdtLab_code']]), array('bdtLab_code'=>$sample_info['bdtLab_code']));
+                Class_db::getInstance()->db_update('bdt_sample_info', array('bdtLab_sampleCode'=>$_POST['mbcr_bdtLab_sampleCode_'.$sample_info['bdtLab_code']], 'bdtLab_thod'=>$_POST['mbcr_bdtLab_thod_'.$sample_info['bdtLab_code']], 'bdtLab_result'=>$_POST['mbcr_bdtLab_result_'.$sample_info['bdtLab_code']]), 
+                    array('bdtLab_code'=>$sample_info['bdtLab_code']));
             }
-            $result = '1';
+            $wfTask_statusSave = (!empty($_POST['mbcr_action'])) ? $_POST['mbcr_action'] : '';
+            $result = Class_db::getInstance()->db_update('wf_task', array('wfTask_statusSave'=>$wfTask_statusSave, 'wfTask_remark'=>$_POST['mbcr_wfTask_remark']), array('wfTask_id'=>$_POST['mbcr_wfTask_id']));
+            //$fn_task->save_audit (222, $_POST['mpcr_phyRep_no']);  
         } else if ($_POST['funct'] == 'create_ect_cert') {
             if (empty($_POST['mcsl_client_id']))            throw new Exception('(ErrCode:6809) [' . __LINE__ . '] - Field Customer Name empty.', 32);
             $wfTask_id = $fn_task->task_create($_SESSION['user_id'], '3', '4', '21', $_POST['mcsl_client_id']);

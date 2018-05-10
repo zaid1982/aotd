@@ -11,7 +11,7 @@
             <div class="modal-body modal-fixHeight"> 
                 <div class="row padding-15">
                     <div class="process">
-                        <div class="process-row nav nav-tabs" id="mbcr_steps"></div>
+                        <div class="process-row3 nav nav-tabs" id="mbcr_steps"></div>
                     </div>
                 </div>  
                 <h6>Information<a href="javascript:void(0);" class="btn btn-xs btn-primary pull-right mbcr_infoView" onclick="f_mbsl_load_sample_login(2, mbcr_bdtRep_no.value, 'mbcr');" rel="tooltip" data-placement="left" data-original-title="Edit Certificate Information"><i class="fa fa-edit"></i> Edit Certificate Info</a></h6>
@@ -140,9 +140,12 @@
                             <table id="datatable_mbcr_sample" class="table table-bordered table-hover" width="100%">
                                 <thead>
                                     <tr>
-                                        <th width="40px">No.</th>                    
+                                        <th width="40px">No.</th>                      
                                         <th>Sample Code</th>   
-                                        <th width="40%">Sample Description</th>                                         
+                                        <th width="25%">Sample Description</th>
+                                        <th width="10%">THOD</th>
+                                        <th width="35%">Result</th>
+                                        <th width="40px"></th>                                     
                                     </tr>
                                 </thead> 
                                 <tbody></tbody>									
@@ -298,14 +301,39 @@
                             </article>
                         </div>
                         <div class="form-group padding-top-15">
-                            <label class="col-md-2 control-label"><font color="red">*</font> Result</label>
-                            <div class="col-md-10">
+                            <label class="col-md-3 control-label"><font color="red">*</font> Result</label>
+                            <div class="col-md-9">
                                 <textarea class="form-control" name="mbcr_snote_bdtLab_result" id="mbcr_snote_bdtLab_result" rows="6"></textarea>
                                 <input type="hidden" name=mbcr_bdtLab_result" id="mbcr_bdtLab_result" />
                             </div>
                         </div>    
                     </form>          
                 </div>
+                <h6 class="padding-top-10 mbcr_div_action">Result Status</h6>
+                <div class="well well-light mbcr_div_action">
+                    <form class="form-horizontal" id="form_mbcr_action">
+                        <div class="form-group">
+                            <label class="col-md-3 control-label"><font color="red">*</font> Final Test Status</label>
+                            <div class="col-md-9">   
+                                <label class="radio radio-inline">
+                                    <input type="radio" class="radiobox" name="mbcr_action" value="42">
+                                    <span>Completed</span> 
+                                </label>
+                                <label class="radio radio-inline">
+                                    <input type="radio" class="radiobox" name="mbcr_action" value="50">
+                                    <span>Incomplete</span>  
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Remarks</label>
+                            <div class="col-md-9">
+                                <textarea class="form-control" name="mbcr_snote_wfTask_remark" id="mbcr_snote_wfTask_remark" rows="6"></textarea>
+                                <input type="hidden" name="mbcr_wfTask_remark" id="mbcr_wfTask_remark" />
+                            </div>
+                        </div>    
+                    </form>                    
+                </div>      
                 <h6 class="padding-top-10">Transaction History</h6>
                 <div class="row">
                     <article class="col-md-12">
