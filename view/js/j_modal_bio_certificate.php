@@ -18,6 +18,8 @@
     var data_mbcr_workbook_2;
     var mbcr_otable_workbook_3;
     var data_mbcr_workbook_3;
+    var mbcr_otable_upload;
+    var data_mbcr_upload;
     var mbcr_current_day;
     var mbcr_bdtRep_cycle = 0;
     
@@ -348,6 +350,49 @@
                 ]
         });
         
+        var datatable_mbcr_upload = undefined; 
+        mbcr_otable_upload = $('#datatable_mbcr_upload').DataTable({
+            "ordering": false,
+            "lengthChange": false,
+            "autoWidth": false,
+            "bFilter": false,
+            "preDrawCallback": function () {
+                if (!datatable_mbcr_upload) {
+                    datatable_mbcr_upload = new ResponsiveDatatablesHelper($('#datatable_mbcr_upload'), breakpointDefinition);
+                }
+            },
+            "rowCallback": function (nRow, aData, index) {
+                datatable_mbcr_upload.createExpandIcon(nRow);
+                var info = mbcr_otable_upload.page.info();
+                $('td', nRow).eq(0).html(info.page * info.length + (index + 1));
+            },
+            "drawCallback": function (oSettings) {
+                datatable_mbcr_upload.respond();
+                if (Math.ceil((this.fnSettings().fnRecordsDisplay()) / this.fnSettings()._iDisplayLength) > 1) {
+                    $('#datatable_mbcr_upload_paginate')[0].style.display = "block";
+                    $('#datatable_mbcr_upload_info')[0].style.display = "block";
+                } else {
+                    $('#datatable_mbcr_upload_paginate')[0].style.display = "none";
+                    $('#datatable_mbcr_upload_info')[0].style.display = "none";
+                }
+            },
+            "aoColumns":
+                [
+                    {mData: null},
+                    {mData: 'document_name'},
+                    {mData: 'document_sampleCode'},
+                    {mData: 'documentName_desc'},
+                    {mData: 'document_remarks'},
+                    {mData: null, bSortable: false, sClass: 'text-center',
+                        mRender: function (data, type, row) {
+                            $label = '<a href="javascript:void(0)" class="btn btn-info btn-xs" style="width:24px" onclick="f_mvd_load_view_document (1, '+row.document_id+',\'mbcr\');" data-toggle="tooltip" data-original-title="View Attachment"><i class="fa fa-file-o"></i></a> ';
+                            $label += '<a href="javascript:void(0)" class="btn btn-danger btn-xs mbcr_attachEdit" style="width:24px" onclick="f_mup_delete_file ('+row.document_id+', \'mbcr\');" data-toggle="tooltip" data-original-title="Delete Attachment"><i class="fa fa-trash-o"></i></a>';
+                            return $label;
+                        }
+                    }
+                ]
+        });
+        
         var datatable_mbcr_history = undefined; 
         mbcr_otable_history = $('#datatable_mbcr_history').DataTable({
             "paging": false,
@@ -415,6 +460,12 @@
                     f_notify(2, 'Error', errMsg_validation);    
                     return false;
                 }
+                var bootstrapValidator2 = $("#form_mbcr_action").data('bootstrapValidator');
+                bootstrapValidator2.validate();
+                if (!bootstrapValidator2.isValid()) {         
+                    f_notify(2, 'Error', errMsg_validation);    
+                    return false;
+                }
                 $.SmartMessageBox({
                     title : "<i class='fa fa-exclamation-circle'></i> Confirmation!",
                     content : "Are you sure?",
@@ -423,10 +474,11 @@
                     if (ButtonPressed === "Yes") {
                         $('#modal_waiting').on('shown.bs.modal', function(e){   
                             $('#mbcr_funct').val('save_bdt_sample_info');
-                            if (f_submit_forms('form_mbcr,#form_mbcr_form', 'p_aotd')) {
+                            $('#mbcr_wfTask_remark').val($('[name="mbcr_snote_wfTask_remark"]').summernote('code'));
+                            if (f_submit_forms('form_mbcr,#form_mbcr_form,#form_mbcr_action', 'p_aotd')) {
                                 data_mbcr_sample = f_get_general_info_multiple('bdt_sample_info', {bdtRep_no:$('#mbcr_bdtRep_no').val()}, {}, '', 'bdtLab_code');
                                 f_dataTable_draw(mbcr_otable_sample, data_mbcr_sample, 'datatable_mbcr_sample', 6);
-                                if (f_submit($('#mbcr_wfTask_id').val(), $('#mbcr_wfTaskType_id').val(), '10', 'Sample Registration successfully submitted.', '', '', '', '', 'bdtRep_no', $('#mbcr_bdtRep_no').val())) {
+                                if (f_submit($('#mbcr_wfTask_id').val(), $('#mbcr_wfTaskType_id').val(), $('input[name="mbcr_action"]:checked').val(), 'Sample Registration successfully submitted.', $('#mbcr_wfTask_remark').val(), '', '', '', 'bdtRep_no', $('#mbcr_bdtRep_no').val())) {
                                     f_blg_summary();
                                     f_blg_process (blg_summary_id);
                                     $('#modal_bio_certificate').modal('hide');
@@ -509,14 +561,23 @@
                     if (wf_task.wfTask_statusSave != null)
                         $("input[name='mbcr_action'][value="+wf_task.wfTask_statusSave+"]").prop('checked', true);
                     $('#mbcr_snote_wfTask_remark').summernote('code', wf_task.wfTask_remark);
+                    $('#mbcr_snote_wfTask_remark').summernote('enable');
                 } else if (mbcr_otable == 'bwb') {    
                     mbcr_otable_workSummary.columns(5).visible(true);
                 }
             } else if (mbcr_load_type == 3) {
                 $('#form_mbcr_workbook, #form_mbcr_action').find('input, textarea, select').prop('disabled',true);
+                $("input[name='mbcr_action'][value="+cert_info.bdtRep_status+"]").prop('checked', true);
+                $('#mbcr_snote_wfTask_remark').summernote('code', cert_info.bdtRep_conclusion);
                 $('#mbcr_snote_bdtLab_result').summernote('disable');
                 $('#mbcr_snote_wfTask_remark').summernote('disable');
+                if (cert_info.bdtRep_isEntry == '1') {
+                    $('.mbcr_div_workbook').hide();
+                    $('#datatable_mbcr_sampleView tbody tr').eq(0).removeClass('bg-color-yellow txt-color-white');
+                }
             }
+            data_mbcr_upload = f_get_general_info_multiple('dt_document', {document_sampleCode:'%'+cert_info.bdtRep_no+'%'}, {}, '', 'document_sampleCode');
+            f_dataTable_draw(mbcr_otable_upload, data_mbcr_upload, 'datatable_mbcr_upload', 6);
             data_mbcr_history = f_get_general_info_multiple('dt_task_history', {wfTrans_id:(cert_info.wfTrans_id!=null?cert_info.wfTrans_id:'0')}, '', '', 'wfTask_id');
             f_dataTable_draw(mbcr_otable_history, data_mbcr_history, 'datatable_mbcr_history', 6);
             $('#mbcr_wfTask_id').val(wfTask_id);

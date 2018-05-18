@@ -189,8 +189,9 @@ class Class_task {
                         }
                     }
                 }
-                Class_db::getInstance()->db_update('wf_transaction', array('wfTrans_status'=>'4', 'wfTrans_timeSubmit'=>'Now()'), array('wfTrans_id'=>$wfTrans_id));
-                Class_db::getInstance()->db_update('bdt_sample_log', array('bdtRep_status'=>'4', 'bdtRep_timeReceived'=>'Now()'), array('bdtRep_no'=>$wfTask_refValue));
+                Class_db::getInstance()->db_update('wf_transaction', array('wfTrans_status'=>'9', 'wfTrans_timeSubmit'=>'Now()'), array('wfTrans_id'=>$wfTrans_id));
+                Class_db::getInstance()->db_update('bdt_sample_log', array('bdtRep_status'=>$status, 'bdtRep_timeReceived'=>'Now()', 'bdtRep_timeStarted'=>'Now()', 'bdtRep_timeCompleted'=>'Now()', 'bdtRep_analyst'=>$_SESSION['user_id']), array('bdtRep_no'=>$wfTask_refValue));
+                $this->save_audit(412, $wfTask_refValue);
             } else if ($wfTaskType_id == '21') {
                 $arr_ect_test = Class_db::getInstance()->db_select('ect_test', array('ectTest_status'=>'1'), 'ectTest_id', NULL, 1);
                 $arr_ect_sample = Class_db::getInstance()->db_select('ect_sample_info', array('ectRep_no'=>$wfTask_refValue), 'ectLab_code', NULL, 1);

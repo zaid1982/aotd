@@ -144,7 +144,6 @@
                 [
                     {mData: null},
                     {mData: 'phyLab_code'},
-                    {mData: 'phyLab_sampleCode'},
                     {mData: 'phyLab_sampleDesc'},
                     {mData: 'phyLab_testCondition'},
                     {mData: "phyRep_no", bSortable: false, sClass: 'text-center',
@@ -169,6 +168,8 @@
                     f_mpcr_save_workbook(0);
                 $('#mpcr_phyLab_code').val(data['phyLab_code']);
                 f_mpcr_workbook();
+                data_mpcr_upload = f_get_general_info_multiple('dt_document', {wfTrans_id:$('#mpcr_wfTrans_id').val(), document_sampleCode:$('#mpcr_phyLab_code').val()}, {}, '', 'document_sampleCode');
+                f_dataTable_draw(mpcr_otable_upload, data_mpcr_upload, 'datatable_mpcr_upload', 5);
             }
         }); 
         
@@ -498,10 +499,8 @@
                 f_mpcr_workbook();
                 mpcr_otable_workbook.columns(2).visible(true);
                 mpcr_otable_workbook.columns(3).visible(false);
-                var mpcr_wfTrans_id = cert_info.wfTrans_id != null ? cert_info.wfTrans_id : '0';
-                data_mpcr_upload = f_get_general_info_multiple('dt_document', {wfTrans_id:mpcr_wfTrans_id}, {}, '', 'document_sampleCode');
-                f_dataTable_draw(mpcr_otable_upload, data_mpcr_upload, 'datatable_mpcr_upload', 6);
-                $('.mpcr_attachEdit').hide();
+                data_mpcr_upload = f_get_general_info_multiple('dt_document', {wfTrans_id:cert_info.wfTrans_id != null ? cert_info.wfTrans_id : '', document_sampleCode:$('#mpcr_phyLab_code').val()}, {}, '', 'document_sampleCode');
+                f_dataTable_draw(mpcr_otable_upload, data_mpcr_upload, 'datatable_mpcr_upload', 5);
             }
             var task_turn = 1;
             var wf_task;

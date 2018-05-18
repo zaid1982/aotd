@@ -309,6 +309,24 @@
                         </div>    
                     </form>          
                 </div>
+                <h6 class="padding-top-10 mbcr_div_upload">Attachments<a href="javascript:void(0);" class="btn btn-xs btn-primary pull-right mbcr_attachEdit" onclick="f_mup_load_upload(1, mbcr_bdtRep_no.value, mbcr_wfTrans_id.value, 'mbcr');" rel="tooltip" data-placement="left" data-original-title="Add Attachment"><i class="fa fa-upload"></i> Add Attachment</a></h6>
+                <div class="row mbcr_div_upload">
+                    <article class="col-md-12">
+                        <table id="datatable_mbcr_upload" class="table table-bordered table-hover" width="100%">
+                            <thead>
+                                <tr>
+                                    <th width="40px">No.</th>                    
+                                    <th width="23%">Document Name</th>        
+                                    <th width="20%">Sample Code</th>   
+                                    <th width="15%">Category</th>                   
+                                    <th>Description</th>   
+                                    <th style="width: 60px; max-width: 60px">&nbsp;</th>
+                                </tr>
+                            </thead> 
+                            <tbody></tbody>									
+                        </table>   
+                    </article>
+                </div>
                 <h6 class="padding-top-10 mbcr_div_action">Result Status</h6>
                 <div class="well well-light mbcr_div_action">
                     <form class="form-horizontal" id="form_mbcr_action">
@@ -326,7 +344,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-3 control-label">Remarks</label>
+                            <label class="col-md-3 control-label">Conclusion</label>
                             <div class="col-md-9">
                                 <textarea class="form-control" name="mbcr_snote_wfTask_remark" id="mbcr_snote_wfTask_remark" rows="6"></textarea>
                                 <input type="hidden" name="mbcr_wfTask_remark" id="mbcr_wfTask_remark" />

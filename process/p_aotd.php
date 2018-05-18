@@ -41,6 +41,8 @@ try {
                 Class_db::getInstance()->db_update('ect_test', array('ectTest_price'=>$_POST['mle2_lab_cost']), array('ectTest_id'=>'>0'));
             $result = Class_db::getInstance()->db_update('aotd_lab', array('lab_name'=>$_POST['mle2_lab_name'], 'lab_desc'=>$_POST['mle2_lab_desc'], 'lab_head_unit'=>$_POST['mle2_lab_head_unit'], 'lab_quality_manager'=>$_POST['mle2_lab_quality_manager'],
                 'lab_research_officer'=>$_POST['mle2_lab_research_officer']), array('lab_id'=>$_POST['mle2_lab_id']));
+            $audit_code = Class_db::getInstance()->db_select_col ('aotd_lab', array('lab_id'=>$_POST['mle2_lab_id']), 'lab_auditCode', NULL, 1);
+            $fn_task->save_audit ($audit_code.'00');
         } else if ($_POST['funct'] == 'create_ats_test') {
             $result = Class_db::getInstance()->db_insert('ats_test', array('atsTest_status'=>'2'));
             $fn_task->save_audit (101, 'Test ID = '.$result);
@@ -344,12 +346,14 @@ try {
                 Class_db::getInstance()->db_insert('bdt_sample_info', array('bdtRep_no'=>$cert_no, 'bdtLab_code'=>$cert_no.'/'.$i, 'bdtLab_barCode'=>$barcode_no));
             }
             $result = array('bdtRep_no'=>$cert_no, 'wfTask_id'=>$wfTask_id);     
+            $fn_task->save_audit (409, $cert_no);
         } else if ($_POST['funct'] == 'save_bdt_cert_info') {
             if (empty($_POST['mbsl_bdtRep_no']))    throw new Exception('(ErrCode:6833) [' . __LINE__ . '] - Parameter bdtRep_no empty.');
             $bdtRep_msds = (!empty($_POST['mbsl_bdtRep_msds'])) ? $_POST['mbsl_bdtRep_msds'] : '0';
             $result = Class_db::getInstance()->db_update('bdt_sample_log', array('bdtRep_sampleDesc'=>$_POST['mbsl_bdtRep_sampleDesc'], 'bdtRep_substance'=>$_POST['mbsl_bdtRep_substance'], 'bdtRep_formula'=>$_POST['mbsl_bdtRep_formula'],
                 'bdtRep_component'=>$_POST['mbsl_bdtRep_component'], 'bdtRep_physical'=>$_POST['mbsl_bdtRep_physical'], 'bdtRep_solubility'=>$_POST['mbsl_bdtRep_solubility'], 'bdtRep_condition'=>$_POST['mbsl_bdtRep_condition'], 'bdtRep_msds'=>$bdtRep_msds, 'bdtRep_remark'=>$_POST['mbsl_bdtRep_remark']), 
                 array('bdtRep_no'=>$_POST['mbsl_bdtRep_no']));
+            $fn_task->save_audit (410, $_POST['mbsl_bdtRep_no']);
         } else if ($_POST['funct'] == 'save_bdt_sample_info') {
             if (empty($_POST['mbcr_bdtRep_no']))    throw new Exception('(ErrCode:6833) [' . __LINE__ . '] - Parameter bdtRep_no empty.');
             $arr_sample_info = Class_db::getInstance()->db_select('bdt_sample_info', array('bdtRep_no'=>$_POST['mbcr_bdtRep_no']), NULL, NULL, 1);
@@ -359,7 +363,8 @@ try {
             }
             $wfTask_statusSave = (!empty($_POST['mbcr_action'])) ? $_POST['mbcr_action'] : '';
             $result = Class_db::getInstance()->db_update('wf_task', array('wfTask_statusSave'=>$wfTask_statusSave, 'wfTask_remark'=>$_POST['mbcr_wfTask_remark']), array('wfTask_id'=>$_POST['mbcr_wfTask_id']));
-            //$fn_task->save_audit (222, $_POST['mpcr_phyRep_no']);  
+            $result = Class_db::getInstance()->db_update('bdt_sample_log', array('bdtRep_conclusion'=>$_POST['mbcr_wfTask_remark']), array('bdtRep_no'=>$_POST['mbcr_bdtRep_no']));
+            $fn_task->save_audit (413, $_POST['mbcr_bdtRep_no']);  
         } else if ($_POST['funct'] == 'create_ect_cert') {
             if (empty($_POST['mcsl_client_id']))            throw new Exception('(ErrCode:6809) [' . __LINE__ . '] - Field Customer Name empty.', 32);
             $wfTask_id = $fn_task->task_create($_SESSION['user_id'], '3', '4', '21', $_POST['mcsl_client_id']);

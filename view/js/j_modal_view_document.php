@@ -25,6 +25,10 @@
                 f_save_audit('217', document.document_sampleCode);
             else if (mvd_otable == 'mfcr')
                 f_save_audit('317', document.document_sampleCode);
+            else if (mvd_otable == 'mbcr')
+                f_save_audit('417', document.document_sampleCode);
+            else if (mvd_otable == 'mccr')
+                f_save_audit('517', document.document_sampleCode);
             var filename = document.document_folder + '/' + document.document_filename + '.' + document.document_extension;
             filename = filename.slice(3);
             $('#mvd_iframe').attr('src', filename+'#zoom=100');   

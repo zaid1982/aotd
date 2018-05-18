@@ -220,24 +220,24 @@
                             </table>   
                         </article>
                     </div>
-                    <div class="row">
-                        <article class="col-md-12">
-                            <table id="datatable_macr_upload" class="table table-bordered table-hover" width="100%">
-                                <thead>
-                                    <tr><th colspan="6" style="background-color: lightgrey">Attachments<a href="javascript:void(0);" class="btn btn-xs btn-primary pull-right macr_attachEdit" onclick="f_mup_load_upload(1, macr_atsCert_id.value, macr_wfTrans_id.value, 'macr');" rel="tooltip" data-placement="left" data-original-title="Add Attachment"><i class="fa fa-upload"></i> Add Attachment</a></tr>
-                                    <tr>
-                                        <th width="40px">No.</th>                    
-                                        <th width="23%">Document Name</th>        
-                                        <th width="20%">Sample Code</th>   
-                                        <th width="15%">Category</th>                   
-                                        <th>Description</th>   
-                                        <th style="width: 60px; max-width: 60px">&nbsp;</th>
-                                    </tr>
-                                </thead> 
-                                <tbody></tbody>									
-                            </table>   
-                        </article>   
-                    </div>
+                </div>
+                <h6 class="padding-top-10 macr_div_upload">Attachments<a href="javascript:void(0);" class="btn btn-xs btn-primary pull-right macr_attachEdit" onclick="f_mup_load_upload(1, macr_bdtRep_no.value, macr_wfTrans_id.value, 'macr');" rel="tooltip" data-placement="left" data-original-title="Add Attachment"><i class="fa fa-upload"></i> Add Attachment</a></h6>
+                <div class="row macr_div_upload">
+                    <article class="col-md-12">
+                        <table id="datatable_macr_upload" class="table table-bordered table-hover" width="100%">
+                            <thead>
+                                <tr>
+                                    <th width="40px">No.</th>                    
+                                    <th width="23%">Document Name</th>        
+                                    <th width="20%">Sample Code</th>   
+                                    <th width="15%">Category</th>                   
+                                    <th>Description</th>   
+                                    <th style="width: 60px; max-width: 60px">&nbsp;</th>
+                                </tr>
+                            </thead> 
+                            <tbody></tbody>									
+                        </table>   
+                    </article>
                 </div>
                 <h6 class="padding-top-10 macr_div_action">Action</h6>
                 <div class="well well-light macr_div_action">
@@ -287,6 +287,7 @@
                 <form id="form_macr">
                     <input type="hidden" name="funct" id="macr_funct" />
                     <input type="hidden" name="macr_atsCert_id" id="macr_atsCert_id" />
+                    <input type="hidden" name="macr_atsCert_no" id="macr_atsCert_no" />
                     <input type="hidden" name="macr_wfTrans_id" id="macr_wfTrans_id" />
                     <input type="hidden" name="macr_wfTask_id" id="macr_wfTask_id" />
                     <input type="hidden" name="macr_wfTask_status" id="macr_wfTask_status" />

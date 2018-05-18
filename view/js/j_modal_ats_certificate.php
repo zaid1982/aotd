@@ -662,8 +662,7 @@
                     f_macr_generate_workbook(data_macr_workSummary[0].atsField_id);
                     $('#datatable_macr_workSummary tbody tr').eq(0).addClass('bg-color-yellow txt-color-white');
                 }
-                var macr_wfTrans_id = cert_info.wfTrans_id != null ? cert_info.wfTrans_id : '0';
-                data_macr_upload = f_get_general_info_multiple('dt_document', {wfTrans_id:macr_wfTrans_id}, {}, '', 'document_sampleCode');
+                data_macr_upload = f_get_general_info_multiple('dt_document', {document_sampleCode:'%'+cert_info.atsCert_no+'%'}, {}, '', 'document_sampleCode');
                 f_dataTable_draw(macr_otable_upload, data_macr_upload, 'datatable_macr_upload', 6);
                 $('.macr_attachEdit').hide();
             } 

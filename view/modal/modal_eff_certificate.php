@@ -233,12 +233,11 @@
                         <article class="col-md-12">
                             <table id="datatable_mfcr_upload" class="table table-bordered table-hover" width="100%">
                                 <thead>
-                                    <tr><th colspan="6" style="background-color: lightgrey">Attachments<a href="javascript:void(0);" class="btn btn-xs btn-primary pull-right mfcr_attachEdit" onclick="f_mup_load_upload(1, mfcr_effRep_no.value, mfcr_wfTrans_id.value, 'mfcr');" rel="tooltip" data-placement="left" data-original-title="Add Attachment"><i class="fa fa-upload"></i> Add Attachment</a></tr>
+                                    <tr><th colspan="5" style="background-color: lightgrey">Attachments<a href="javascript:void(0);" class="btn btn-xs btn-primary pull-right mfcr_attachEdit" onclick="f_mup_load_upload(1, mfcr_effRep_no.value, mfcr_wfTrans_id.value, 'mfcr', mfcr_effLab_code.value);" rel="tooltip" data-placement="left" data-original-title="Add Attachment"><i class="fa fa-upload"></i> Add Attachment</a></tr>
                                     <tr>
                                         <th width="40px">No.</th>                    
-                                        <th width="23%">Document Name</th>        
-                                        <th width="20%">Sample Code</th>   
-                                        <th width="15%">Category</th>                   
+                                        <th width="23%">Document Name</th>   
+                                        <th width="20%">Category</th>                   
                                         <th>Description</th>   
                                         <th style="width: 60px; max-width: 60px">&nbsp;</th>
                                     </tr>

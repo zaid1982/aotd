@@ -201,6 +201,8 @@
                     f_mfcr_save_workbook(0);
                 $('#mfcr_effLab_code').val(data['effLab_code']);
                 f_mfcr_workbook();
+                data_mfcr_upload = f_get_general_info_multiple('dt_document', {wfTrans_id:$('#mfcr_wfTrans_id').val(), document_sampleCode:$('#mfcr_effLab_code').val()}, {}, '', 'document_sampleCode');
+                f_dataTable_draw(mfcr_otable_upload, data_mfcr_upload, 'datatable_mfcr_upload', 5);
             }
         }); 
         
@@ -278,7 +280,6 @@
                 [
                     {mData: null},
                     {mData: 'document_name'},
-                    {mData: 'document_sampleCode'},
                     {mData: 'documentName_desc'},
                     {mData: 'document_remarks'},
                     {mData: null, bSortable: false, sClass: 'text-center',
@@ -550,7 +551,7 @@
             mfcr_otable = otable;
             mfcr_load_type = load_type;
             $('.mfcr_viewOnly').prop('disabled',true);
-            $('.mfcr_editView, .mfcr_div_sample, .mfcr_div_sampleView, .mfcr_div_workbook, .mfcr_div_starting, .mfcr_attachEdit, .mfcr_div_action').hide();
+            $('.mfcr_editView, .mfcr_div_sample, .mfcr_div_sampleView, .mfcr_div_workbook, .mfcr_div_starting, .mfcr_div_action').hide();
             f_get_general_info('aotd_lab', {lab_id:'EFF'}, 'mfcr');
             var cert_info = f_get_general_info('vw_eff_cert', {effRep_no:effRep_no}, 'mfcr');
             $('#mfcr_effRep_cycle').val(cert_info.effRep_cycle);
@@ -566,10 +567,8 @@
                     f_mfcr_workbook();
                     mfcr_otable_workbook.columns(2).visible(true);
                     mfcr_otable_workbook.columns(3).visible(false);
-                    var mfcr_wfTrans_id = cert_info.wfTrans_id != null ? cert_info.wfTrans_id : '0';
-                    data_mfcr_upload = f_get_general_info_multiple('dt_document', {wfTrans_id:mfcr_wfTrans_id}, {}, '', 'document_sampleCode');
-                    f_dataTable_draw(mfcr_otable_upload, data_mfcr_upload, 'datatable_mfcr_upload', 6);
-                    $('.mfcr_attachEdit').hide();
+                    data_mfcr_upload = f_get_general_info_multiple('dt_document', {wfTrans_id:cert_info.wfTrans_id!=null?cert_info.wfTrans_id:'', document_sampleCode:$('#mfcr_effLab_code').val()}, {}, '', 'document_sampleCode');
+                    f_dataTable_draw(mfcr_otable_upload, data_mfcr_upload, 'datatable_mfcr_upload', 5);
                 }
             }
             var task_turn = 1;
@@ -603,7 +602,6 @@
                 } else if (mfcr_otable == 'fwb') {
                     mfcr_otable_workbook.columns(2).visible(false);
                     mfcr_otable_workbook.columns(3).visible(true);
-                    $('.mfcr_attachEdit').show();
                 } else if (mfcr_otable == 'fvf' || mfcr_otable == 'fvs') {
                     $('.mfcr_div_action').show(); 
                     if (wf_task.wfTask_statusSave != null)
