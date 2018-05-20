@@ -205,8 +205,9 @@ class Class_task {
                         }
                     }
                 }
-                Class_db::getInstance()->db_update('wf_transaction', array('wfTrans_status'=>'4', 'wfTrans_timeSubmit'=>'Now()'), array('wfTrans_id'=>$wfTrans_id));
-                Class_db::getInstance()->db_update('ect_sample_log', array('ectRep_status'=>'4', 'ectRep_timeReceived'=>'Now()'), array('ectRep_no'=>$wfTask_refValue));
+                Class_db::getInstance()->db_update('wf_transaction', array('wfTrans_status'=>'9', 'wfTrans_timeSubmit'=>'Now()'), array('wfTrans_id'=>$wfTrans_id));
+                Class_db::getInstance()->db_update('ect_sample_log', array('ectRep_status'=>$status, 'ectRep_timeReceived'=>'Now()', 'ectRep_timeStarted'=>'Now()', 'ectRep_timeCompleted'=>'Now()', 'ectRep_analyst'=>$_SESSION['user_id']), array('ectRep_no'=>$wfTask_refValue));
+                $this->save_audit(512, $wfTask_refValue);
             } else if ($wfTaskType_id == '31') {
                 $phyTest_id = Class_db::getInstance()->db_select_col('phy_sample_log', array('phyRep_no'=>$wfTask_refValue), 'phyTest_id', NULL, 1);
                 $arr_phy_field = Class_db::getInstance()->db_select('phy_field', array('phyTest_id'=>$phyTest_id, 'phyField_status'=>'1'), 'phyField_id', NULL, 1);

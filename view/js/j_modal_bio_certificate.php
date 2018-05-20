@@ -102,7 +102,7 @@
                         var bootstrapValidator = $("#form_mbcr_form").data('bootstrapValidator');
                         bootstrapValidator.addField('mbcr_bdtLab_sampleCode_'+visibleRows[j].bdtLab_code, {validators:{notEmpty:{message:'Required'},stringLength:{max:100, message:'Max 100 words'}}});
                         bootstrapValidator.addField('mbcr_bdtLab_thod_'+visibleRows[j].bdtLab_code, {validators:{notEmpty:{message:'Required'},numeric:{max:100, message:'Invalid number', thousandsSeparator:'', decimalSeparator: '.'}}});
-                        bootstrapValidator.addField('mbcr_bdtLab_result_'+visibleRows[j].bdtLab_code, {validators:{notEmpty:{message:'Required'},stringLength:{max:100, message:'Max 255 words'}}});
+                        bootstrapValidator.addField('mbcr_bdtLab_result_'+visibleRows[j].bdtLab_code, {validators:{notEmpty:{message:'Required'},stringLength:{max:255, message:'Max 255 words'}}});
                     }
                 }
             },

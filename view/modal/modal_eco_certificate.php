@@ -11,7 +11,7 @@
             <div class="modal-body modal-fixHeight"> 
                 <div class="row padding-15">
                     <div class="process">
-                        <div class="process-row nav nav-tabs" id="mccr_steps"></div>
+                        <div class="process-row3 nav nav-tabs" id="mccr_steps"></div>
                     </div>
                 </div>  
                 <h6>Information<a href="javascript:void(0);" class="btn btn-xs btn-primary pull-right mccr_infoView" onclick="f_mcsl_load_sample_login(2, mccr_ectRep_no.value, 'mccr');" rel="tooltip" data-placement="left" data-original-title="Edit Certificate Information"><i class="fa fa-edit"></i> Edit Certificate Info</a></h6>
@@ -135,8 +135,10 @@
                                 <thead>
                                     <tr>
                                         <th width="40px">No.</th>                    
-                                        <th>Sample Code</th>   
-                                        <th width="40%">Sample Description</th>
+                                        <th width="25%">Sample Code</th>   
+                                        <th>Sample Description</th>
+                                        <th width="40%">Result</th>
+                                        <th width="40px"></th>
                                     </tr>
                                 </thead> 
                                 <tbody></tbody>									
@@ -172,13 +174,13 @@
                     </article>
                 </div>
                 <h6 class="padding-top-10 mccr_div_workbook">Workbook
-                    <div class="pull-right">
+<!--                    <div class="pull-right">
                         <a href="javascript:void(0);" class="btn btn-xs btn-primary mccr_infoView" onclick="f_xxx();" rel="tooltip" data-placement="bottom" data-original-title="Edit Day 0"><i class="fa fa-calendar-o"></i> Day 0</a>
                         <a href="javascript:void(0);" class="btn btn-xs btn-primary mccr_infoView" onclick="f_xxx();" rel="tooltip" data-placement="bottom" data-original-title="Edit Day 1"><i class="fa fa-calendar-o"></i> Day 1</a>
                         <a href="javascript:void(0);" class="btn btn-xs btn-primary mccr_infoView" onclick="f_xxx();" rel="tooltip" data-placement="bottom" data-original-title="Edit Day 2"><i class="fa fa-calendar-o"></i> Day 2</a>
                         <a href="javascript:void(0);" class="btn btn-xs btn-primary mccr_infoView" onclick="f_xxx();" rel="tooltip" data-placement="bottom" data-original-title="Edit Day 3"><i class="fa fa-calendar-o"></i> Day 3</a>
                         <a href="javascript:void(0);" class="btn btn-xs btn-danger mccr_infoView" onclick="f_xxx();" rel="tooltip" data-placement="bottom" data-original-title="Edit Day 4"><i class="fa fa-calendar-plus-o"></i> Day 4</a>
-                    </div>
+                    </div>-->
                 </h6>
                 <div class="well well-light mccr_div_workbook">
                     <form class="form-horizontal" id="form_mccr_workbook">
@@ -317,6 +319,50 @@
                         </div>  
                     </form>
                 </div>
+                <h6 class="padding-top-10 mccr_div_upload">Attachments<a href="javascript:void(0);" class="btn btn-xs btn-primary pull-right mccr_attachEdit" onclick="f_mup_load_upload(1, mccr_ectRep_no.value, mccr_wfTrans_id.value, 'mccr');" rel="tooltip" data-placement="left" data-original-title="Add Attachment"><i class="fa fa-upload"></i> Add Attachment</a></h6>
+                <div class="row mccr_div_upload">
+                    <article class="col-md-12">
+                        <table id="datatable_mccr_upload" class="table table-bordered table-hover" width="100%">
+                            <thead>
+                                <tr>
+                                    <th width="40px">No.</th>                    
+                                    <th width="23%">Document Name</th>        
+                                    <th width="20%">Sample Code</th>   
+                                    <th width="15%">Category</th>                   
+                                    <th>Description</th>   
+                                    <th style="width: 60px; max-width: 60px">&nbsp;</th>
+                                </tr>
+                            </thead> 
+                            <tbody></tbody>									
+                        </table>   
+                    </article>
+                </div>
+                
+                <h6 class="padding-top-10 mccr_div_action">Result Status</h6>
+                <div class="well well-light mccr_div_action">
+                    <form class="form-horizontal" id="form_mccr_action">
+                        <div class="form-group">
+                            <label class="col-md-3 control-label"><font color="red">*</font> Final Test Status</label>
+                            <div class="col-md-9">   
+                                <label class="radio radio-inline">
+                                    <input type="radio" class="radiobox" name="mccr_action" value="42">
+                                    <span>Completed</span> 
+                                </label>
+                                <label class="radio radio-inline">
+                                    <input type="radio" class="radiobox" name="mccr_action" value="50">
+                                    <span>Incomplete</span>  
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Conclusion</label>
+                            <div class="col-md-9">
+                                <textarea class="form-control" name="mccr_snote_wfTask_remark" id="mccr_snote_wfTask_remark" rows="6"></textarea>
+                                <input type="hidden" name="mccr_wfTask_remark" id="mccr_wfTask_remark" />
+                            </div>
+                        </div>    
+                    </form>                    
+                </div>      
                 <h6 class="padding-top-10">Transaction History</h6>
                 <div class="row">
                     <article class="col-md-12">

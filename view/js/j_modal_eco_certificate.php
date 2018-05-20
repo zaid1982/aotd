@@ -24,16 +24,12 @@
     var data_mccr_workbook_23;
     var mccr_otable_workbook_24;
     var data_mccr_workbook_24;
+    var mccr_otable_upload;
+    var data_mccr_upload;
     var mccr_current_day;
     var mccr_ectRep_cycle = 0;
     
     $(document).ready(function () {
-        
-        $('#form_mccr_form').bootstrapValidator({
-            excluded: ':disabled',
-            fields: { 
-            }
-        });
         
         $('#mccr_snote_ectLab_results').summernote({
             height: 150,
@@ -53,6 +49,38 @@
 //                }
 //            }
         });   
+        
+        $('#mccr_snote_wfTask_remark').summernote({
+            height: 150,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'italic', 'underline', 'clear']],
+                ['fontname', ['fontname']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['height', ['height']],
+                ['table', ['table']]
+            ]
+        }); 
+        
+        $('#form_mccr_form').bootstrapValidator({
+            excluded: ':disabled',
+            fields: { 
+            }
+        });
+        
+        $('#form_mccr_action').bootstrapValidator({
+            excluded: ':disabled',
+            fields: { 
+                mccr_action : {
+                    validators : {
+                        notEmpty: {
+                            message: 'Final Test Status is required'
+                        }                     
+                    }
+                }                
+            }
+        });
         
         var datatable_mccr_sample = undefined; 
         mccr_otable_sample = $('#datatable_mccr_sample').DataTable({
@@ -79,6 +107,7 @@
                     for(var j=0;j<visibleRows.length;j++){
                         var bootstrapValidator = $("#form_mccr_form").data('bootstrapValidator');
                         bootstrapValidator.addField('mccr_ectLab_sampleCode_'+visibleRows[j].ectLab_code, {validators:{notEmpty:{message:'Required'},stringLength:{max:100, message:'Max 100 words'}}});
+                        bootstrapValidator.addField('mccr_ectLab_results_'+visibleRows[j].ectLab_code, {validators:{notEmpty:{message:'Required'},stringLength:{max:255, message:'Max 255 words'}}});
                     }
                 }
             },
@@ -91,6 +120,20 @@
                             $label = '<div class="form-group margin-bottom-0" style="width:100%">' +
                                 '<input type="text" class="form-control" style="width:100%" name="mccr_ectLab_sampleCode_'+row.ectLab_code+'" id="mccr_ectLab_sampleCode_'+row.ectLab_code+'" value="'+(data!=null?data:'')+'"/>' +
                                 '</div>';
+                            return $label;
+                        }
+                    },
+                    {mData: 'ectLab_results', sClass: 'text-center',
+                        mRender: function (data, type, row) {
+                            $label = '<div class="form-group margin-bottom-0" style="width:100%">' +
+                                '<input type="text" class="form-control" style="width:100%" name="mccr_ectLab_results_'+row.ectLab_code+'" id="mccr_ectLab_results_'+row.ectLab_code+'" value="'+(data!=null?data:'')+'"/>' +
+                                '</div>';
+                            return $label;
+                        }
+                    },
+                    {mData: "ectRep_no", bSortable: false, sClass: 'text-center',
+                        mRender: function (data, type, row) {
+                            $label = '<button type="button" class="btn btn-primary btn-xs" title="Print Barcode" onclick="getBarCode(\'' + row.ectLab_code + '\',\'' + row.ectLab_barCode + '\')"><span class="glyphicon glyphicon-print"></span></button>';
                             return $label;
                         }
                     }
@@ -350,6 +393,49 @@
                 ]
         });
         
+        var datatable_mccr_upload = undefined; 
+        mccr_otable_upload = $('#datatable_mccr_upload').DataTable({
+            "ordering": false,
+            "lengthChange": false,
+            "autoWidth": false,
+            "bFilter": false,
+            "preDrawCallback": function () {
+                if (!datatable_mccr_upload) {
+                    datatable_mccr_upload = new ResponsiveDatatablesHelper($('#datatable_mccr_upload'), breakpointDefinition);
+                }
+            },
+            "rowCallback": function (nRow, aData, index) {
+                datatable_mccr_upload.createExpandIcon(nRow);
+                var info = mccr_otable_upload.page.info();
+                $('td', nRow).eq(0).html(info.page * info.length + (index + 1));
+            },
+            "drawCallback": function (oSettings) {
+                datatable_mccr_upload.respond();
+                if (Math.ceil((this.fnSettings().fnRecordsDisplay()) / this.fnSettings()._iDisplayLength) > 1) {
+                    $('#datatable_mccr_upload_paginate')[0].style.display = "block";
+                    $('#datatable_mccr_upload_info')[0].style.display = "block";
+                } else {
+                    $('#datatable_mccr_upload_paginate')[0].style.display = "none";
+                    $('#datatable_mccr_upload_info')[0].style.display = "none";
+                }
+            },
+            "aoColumns":
+                [
+                    {mData: null},
+                    {mData: 'document_name'},
+                    {mData: 'document_sampleCode'},
+                    {mData: 'documentName_desc'},
+                    {mData: 'document_remarks'},
+                    {mData: null, bSortable: false, sClass: 'text-center',
+                        mRender: function (data, type, row) {
+                            $label = '<a href="javascript:void(0)" class="btn btn-info btn-xs" style="width:24px" onclick="f_mvd_load_view_document (1, '+row.document_id+',\'mccr\');" data-toggle="tooltip" data-original-title="View Attachment"><i class="fa fa-file-o"></i></a> ';
+                            $label += '<a href="javascript:void(0)" class="btn btn-danger btn-xs mccr_attachEdit" style="width:24px" onclick="f_mup_delete_file ('+row.document_id+', \'mccr\');" data-toggle="tooltip" data-original-title="Delete Attachment"><i class="fa fa-trash-o"></i></a>';
+                            return $label;
+                        }
+                    }
+                ]
+        });
+        
         var datatable_mccr_history = undefined; 
         mccr_otable_history = $('#datatable_mccr_history').DataTable({
             "paging": false,
@@ -386,7 +472,8 @@
                 if (mccr_otable == 'elg') {
                     $.each(data_mccr_sample, function(u){
                         var bootstrapValidator = $("#form_mccr_form").data('bootstrapValidator');
-                        bootstrapValidator.removeField('mccr_ectLab_sampleCode_'+data_mccr_sample[u].ectLab_code); 
+                        bootstrapValidator.removeField('mccr_ectLab_sampleCode_'+data_mccr_sample[u].ectLab_code);
+                        bootstrapValidator.removeField('mccr_ectLab_results_'+data_mccr_sample[u].ectLab_code); 
                     });
                 }
             }
@@ -396,9 +483,10 @@
             $('#modal_waiting').on('shown.bs.modal', function(e){   
                 if (mccr_load_type == 2 && mccr_otable == 'elg') {
                     $('#mccr_funct').val('save_ect_sample_info');
-                    if (f_submit_forms('form_mccr,#form_mccr_form', 'p_aotd', 'Data successfully saved.')) {
+                    $('#mccr_wfTask_remark').val($('[name="mccr_snote_wfTask_remark"]').summernote('code'));
+                    if (f_submit_forms('form_mccr,#form_mccr_form,#form_mccr_action', 'p_aotd', 'Data successfully saved.')) {
                         data_mccr_sample = f_get_general_info_multiple('ect_sample_info', {ectRep_no:$('#mccr_ectRep_no').val()}, {}, '', 'ectLab_code');
-                        f_dataTable_draw(mccr_otable_sample, data_mccr_sample, 'datatable_mccr_sample', 3);
+                        f_dataTable_draw(mccr_otable_sample, data_mccr_sample, 'datatable_mccr_sample', 5);
                     }
                 }
                 $('#modal_waiting').modal('hide');
@@ -414,6 +502,12 @@
                     f_notify(2, 'Error', errMsg_validation);    
                     return false;
                 }
+                var bootstrapValidator2 = $("#form_mccr_action").data('bootstrapValidator');
+                bootstrapValidator2.validate();
+                if (!bootstrapValidator2.isValid()) {      
+                    f_notify(2, 'Error', errMsg_validation);    
+                    return false;
+                }
                 $.SmartMessageBox({
                     title : "<i class='fa fa-exclamation-circle'></i> Confirmation!",
                     content : "Are you sure?",
@@ -422,10 +516,11 @@
                     if (ButtonPressed === "Yes") {
                         $('#modal_waiting').on('shown.bs.modal', function(e){   
                             $('#mccr_funct').val('save_ect_sample_info');
-                            if (f_submit_forms('form_mccr,#form_mccr_form', 'p_aotd')) {
+                            $('#mccr_wfTask_remark').val($('[name="mccr_snote_wfTask_remark"]').summernote('code'));
+                            if (f_submit_forms('form_mccr,#form_mccr_form,#form_mccr_action', 'p_aotd')) {
                                 data_mccr_sample = f_get_general_info_multiple('ect_sample_info', {ectRep_no:$('#mccr_ectRep_no').val()}, {}, '', 'ectLab_code');
-                                f_dataTable_draw(mccr_otable_sample, data_mccr_sample, 'datatable_mccr_sample', 3);
-                                if (f_submit($('#mccr_wfTask_id').val(), $('#mccr_wfTaskType_id').val(), '10', 'Sample Registration successfully submitted.', '', '', '', '', 'ectRep_no', $('#mccr_ectRep_no').val())) {
+                                f_dataTable_draw(mccr_otable_sample, data_mccr_sample, 'datatable_mccr_sample', 5);
+                                if (f_submit($('#mccr_wfTask_id').val(), $('#mccr_wfTaskType_id').val(), $('input[name="mccr_action"]:checked').val(), 'Sample Registration successfully submitted.', $('#mccr_wfTask_remark').val(), '', '', '', 'ectRep_no', $('#mccr_ectRep_no').val())) {
                                     f_elg_summary();
                                     f_elg_process (elg_summary_id);
                                     $('#modal_eco_certificate').modal('hide');
@@ -464,10 +559,11 @@
     
     function f_mccr_load_certificate(load_type, ectRep_no, wfTask_id, otable) {
         $('#modal_waiting').on('shown.bs.modal', function(e){
-            $('#form_mccr, #form_mccr_form, #form_mccr_workbook').trigger('reset'); 
+            $('#form_mccr, #form_mccr_form, #form_mccr_workbook, #form_mccr_action').trigger('reset'); 
             $('#form_mccr_form').bootstrapValidator('resetForm', true); 
             $('#form_mccr_workbook').bootstrapValidator('resetForm', true); 
-            $('#form_mccr_workbook').find('input, textarea, select').prop('disabled',false);
+            $('#form_mccr_action').bootstrapValidator('resetForm', true); 
+            $('#form_mccr_workbook, #form_mccr_action').find('input, textarea, select').prop('disabled',false);
             mccr_otable = otable;
             mccr_load_type = load_type;
             $('.mccr_viewOnly').prop('disabled',true);
@@ -506,12 +602,25 @@
                 if (mccr_otable == 'elg') {
                     $('.mccr_div_sample').show();
                     data_mccr_sample = f_get_general_info_multiple('ect_sample_info', {ectRep_no:ectRep_no}, {}, '', 'ectLab_code');
-                    f_dataTable_draw(mccr_otable_sample, data_mccr_sample, 'datatable_mccr_sample', 3);
+                    f_dataTable_draw(mccr_otable_sample, data_mccr_sample, 'datatable_mccr_sample', 5);
+                    if (wf_task.wfTask_statusSave != null)
+                        $("input[name='mccr_action'][value="+wf_task.wfTask_statusSave+"]").prop('checked', true);
+                    $('#mccr_snote_wfTask_remark').summernote('code', wf_task.wfTask_remark);
+                    $('#mccr_snote_wfTask_remark').summernote('enable');
                 }
             } else if (mccr_load_type == 3) {
-                $('#form_mccr_workbook').find('input, textarea, select').prop('disabled',true);
+                $('#form_mccr_workbook, #form_mccr_action').find('input, textarea, select').prop('disabled',true);
+                $("input[name='mccr_action'][value="+cert_info.ectRep_status+"]").prop('checked', true);
+                $('#mccr_snote_wfTask_remark').summernote('code', cert_info.ectRep_conclusion);
                 $('#mccr_snote_ectLab_results').summernote('disable');
+                $('#mccr_snote_wfTask_remark').summernote('disable');
+                if (cert_info.ectRep_isEntry == '1') {
+                    $('.mccr_div_workbook').hide();
+                    $('#datatable_mccr_sampleView tbody tr').eq(0).removeClass('bg-color-yellow txt-color-white');
+                }
             }
+            data_mccr_upload = f_get_general_info_multiple('dt_document', {document_sampleCode:'%'+cert_info.ectRep_no+'%'}, {}, '', 'document_sampleCode');
+            f_dataTable_draw(mccr_otable_upload, data_mccr_upload, 'datatable_mccr_upload', 6);
             data_mccr_history = f_get_general_info_multiple('dt_task_history', {wfTrans_id:(cert_info.wfTrans_id!=null?cert_info.wfTrans_id:'0')}, '', '', 'wfTask_id');
             f_dataTable_draw(mccr_otable_history, data_mccr_history, 'datatable_mccr_history', 6);
             $('#mccr_wfTask_id').val(wfTask_id);

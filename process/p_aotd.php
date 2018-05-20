@@ -362,7 +362,7 @@ try {
                     array('bdtLab_code'=>$sample_info['bdtLab_code']));
             }
             $wfTask_statusSave = (!empty($_POST['mbcr_action'])) ? $_POST['mbcr_action'] : '';
-            $result = Class_db::getInstance()->db_update('wf_task', array('wfTask_statusSave'=>$wfTask_statusSave, 'wfTask_remark'=>$_POST['mbcr_wfTask_remark']), array('wfTask_id'=>$_POST['mbcr_wfTask_id']));
+            Class_db::getInstance()->db_update('wf_task', array('wfTask_statusSave'=>$wfTask_statusSave, 'wfTask_remark'=>$_POST['mbcr_wfTask_remark']), array('wfTask_id'=>$_POST['mbcr_wfTask_id']));
             $result = Class_db::getInstance()->db_update('bdt_sample_log', array('bdtRep_conclusion'=>$_POST['mbcr_wfTask_remark']), array('bdtRep_no'=>$_POST['mbcr_bdtRep_no']));
             $fn_task->save_audit (413, $_POST['mbcr_bdtRep_no']);  
         } else if ($_POST['funct'] == 'create_ect_cert') {
@@ -387,20 +387,25 @@ try {
                 $barcode_no = $inx.$year.$i.'C';
                 Class_db::getInstance()->db_insert('ect_sample_info', array('ectRep_no'=>$cert_no, 'ectLab_code'=>$cert_no.'/'.$i, 'ectLab_barCode'=>$barcode_no));
             }
-            $result = array('ectRep_no'=>$cert_no, 'wfTask_id'=>$wfTask_id);     
+            $result = array('ectRep_no'=>$cert_no, 'wfTask_id'=>$wfTask_id);      
+            $fn_task->save_audit (509, $cert_no);  
         } else if ($_POST['funct'] == 'save_ect_cert_info') {
             if (empty($_POST['mcsl_ectRep_no']))    throw new Exception('(ErrCode:6834) [' . __LINE__ . '] - Parameter ectRep_no empty.');
             $ectRep_msds = (!empty($_POST['mcsl_ectRep_msds'])) ? $_POST['mcsl_ectRep_msds'] : '0';
             $result = Class_db::getInstance()->db_update('ect_sample_log', array('ectRep_sampleDesc'=>$_POST['mcsl_ectRep_sampleDesc'], 'ectRep_substance'=>$_POST['mcsl_ectRep_substance'], 'ectRep_formula'=>$_POST['mcsl_ectRep_formula'],
                 'ectRep_component'=>$_POST['mcsl_ectRep_component'], 'ectRep_physical'=>$_POST['mcsl_ectRep_physical'], 'ectRep_solubility'=>$_POST['mcsl_ectRep_solubility'], 'ectRep_condition'=>$_POST['mcsl_ectRep_condition'], 'ectRep_msds'=>$ectRep_msds, 'ectRep_remark'=>$_POST['mcsl_ectRep_remark']), 
                 array('ectRep_no'=>$_POST['mcsl_ectRep_no']));
+            $fn_task->save_audit (510, $_POST['mcsl_ectRep_no']);
         } else if ($_POST['funct'] == 'save_ect_sample_info') {
             if (empty($_POST['mccr_ectRep_no']))    throw new Exception('(ErrCode:6834) [' . __LINE__ . '] - Parameter ectRep_no empty.');
             $arr_sample_info = Class_db::getInstance()->db_select('ect_sample_info', array('ectRep_no'=>$_POST['mccr_ectRep_no']), NULL, NULL, 1);
             foreach ($arr_sample_info as $sample_info) {
-                Class_db::getInstance()->db_update('ect_sample_info', array('ectLab_sampleCode'=>$_POST['mccr_ectLab_sampleCode_'.$sample_info['ectLab_code']]), array('ectLab_code'=>$sample_info['ectLab_code']));
+                Class_db::getInstance()->db_update('ect_sample_info', array('ectLab_sampleCode'=>$_POST['mccr_ectLab_sampleCode_'.$sample_info['ectLab_code']], 'ectLab_results'=>$_POST['mccr_ectLab_results_'.$sample_info['ectLab_code']]), array('ectLab_code'=>$sample_info['ectLab_code']));
             }
-            $result = '1';
+            $wfTask_statusSave = (!empty($_POST['mccr_action'])) ? $_POST['mccr_action'] : '';
+            Class_db::getInstance()->db_update('wf_task', array('wfTask_statusSave'=>$wfTask_statusSave, 'wfTask_remark'=>$_POST['mccr_wfTask_remark']), array('wfTask_id'=>$_POST['mccr_wfTask_id']));
+            $result = Class_db::getInstance()->db_update('ect_sample_log', array('ectRep_conclusion'=>$_POST['mccr_wfTask_remark']), array('ectRep_no'=>$_POST['mccr_ectRep_no']));
+            $fn_task->save_audit (513, $_POST['mccr_ectRep_no']);  
         } else if ($_POST['funct'] == 'create_phy_cert') {
             if (empty($_POST['mpsl_client_id']))            throw new Exception('(ErrCode:6809) [' . __LINE__ . '] - Field Customer Name empty.', 32);
             if (empty($_POST['mpsl_phyTest_id']))           throw new Exception('(ErrCode:6824) [' . __LINE__ . '] - Field Test Method empty.', 32);

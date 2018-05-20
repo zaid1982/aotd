@@ -39,7 +39,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="col-xs-6 col-sm-6 col-md-12">
+<!--                        <div class="col-xs-6 col-sm-6 col-md-12">
                             <ul id="sparks" class="pull-left">
                                 <li class="sparks-info">
                                     <h5 class="padding-5 elg_lbl_summary elg_lbl_summary_4"> Current Running Certificate <span class="txt-color-blueLight"><i class="fa fa-certificate"></i>&nbsp;&nbsp;<a href="javascript:void(0)" class="lelg_summary" id="lelg_summary_4" onclick="f_elg_summary_click('4', 'Current Running Certificate');" rel="tooltip" data-placement="right" data-original-title="Click to view report">0</a></span></h5>
@@ -52,7 +52,7 @@
                                     <h5 class="padding-5 elg_lbl_summary elg_lbl_summary_48"> Validation <span class="txt-color-pinkDark"><i class="fa fa-certificate"></i>&nbsp;&nbsp;<a href="javascript:void(0)" class="lelg_summary" id="lelg_summary_48" onclick="f_elg_summary_click('48', 'Validation');" rel="tooltip" data-placement="right" data-original-title="Click to view report">0</a></span></h5>
                                 </li>
                             </ul>
-                        </div>
+                        </div>-->
                         <div class="col-xs-6 col-sm-6 col-md-12">
                             <ul id="sparks" class="pull-left">
                                 <li class="sparks-info">
