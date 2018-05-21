@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 session_start();
 require_once '../library/db.php';
@@ -12,7 +12,7 @@ function log_debug($line, $msg, $log_dir) {
     error_log($debugMsg, 3, $log_dir.'/debug/debug_'.date("Ymd").'.log');
 }
 
-$form_data = array(); // Pass back the data to form
+$form_data = array(); 
 
 try {
     /* Validate the form on the server side - 6835 */
