@@ -114,12 +114,12 @@ try {
             $source = Class_db::getInstance()->db_select_col ('vw_client_info', array('client_id'=>$_POST['masl_client_id']), 'clientType_id', NULL, 1);
             $inx = Class_db::getInstance()->db_select_col ('aotd_seq', array('seq_type'=>'cert', 'lab_id'=>'ATS', 'seq_year'=>$year), 'seq_inx');
             $ac = $_POST['masl_atsCert_accredited'] == '1' ? 'AC' : 'NAC';
-            $cert_no = "QEA/ATS/".$source."/".$ac."/".$inx."-".$year;
-            Class_db::getInstance()->db_update('wf_transaction', array('wfTrans_regNo'=>$cert_no), array('wfTrans_id'=>$wfTrans_id));
             if ($inx == '') {
                 $inx = '1';
                 Class_db::getInstance()->db_insert('aotd_seq', array('seq_type'=>'cert', 'lab_id'=>'ATS', 'seq_year'=>$year, 'seq_inx'=>$inx));
             }
+            $cert_no = "QEA/ATS/".$source."/".$ac."/".$inx."-".$year;
+            Class_db::getInstance()->db_update('wf_transaction', array('wfTrans_regNo'=>$cert_no), array('wfTrans_id'=>$wfTrans_id));
             Class_db::getInstance()->db_update('aotd_seq', array('seq_inx'=>intVal($inx)+1), array('seq_type'=>'cert', 'lab_id'=>'ATS', 'seq_year'=>$year));
             $atsCert_accredited = (!empty($_POST['masl_atsCert_accredited'])) ? $_POST['masl_atsCert_accredited'] : '0';
             $atsCert_equipment = (!empty($_POST['masl_atsCert_equipment'])) ? $_POST['masl_atsCert_equipment'] : '0';

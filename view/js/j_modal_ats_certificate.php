@@ -357,8 +357,9 @@
                         }
                     },
                     {mData: 'total', sClass: 'text-right',
-                        mRender: function (data, type, row) {                            
-                            return data + ' / ' + row.total_lab;
+                        mRender: function (data, type, row) {  
+                            $label = row.atsCertField_id==null?'':data+' / '+row.total_lab;
+                            return $label;
                         }
                     },
                     {mData: null, bSortable: false, sClass: 'text-center',
@@ -381,17 +382,17 @@
         $('#datatable_macr_workSummary tbody').delegate('tr', 'click', function (evt) {
             var data = macr_otable_workSummary.row( this ).data();
             var $cell=$(evt.target).closest('td');
-            if( $cell.index()<5) {
-                $("#datatable_macr_workSummary tbody tr").removeClass('bg-color-yellow txt-color-white');		
-		$(this).addClass('bg-color-yellow txt-color-white');
-                if (data['atsCertField_id'] == null) {
-                    f_masf_load_formula (1, data['atsCert_id'], data['atsField_id'], data['atsCertField_id'] , 'macr');
+            if( $cell.index()<5) {                
+                if (data['atsCertField_id'] == null && macr_otable == 'awb' && macr_load_type == 2) {
+                    f_masf_load_formula (1, data['atsCert_id'], data['atsField_id'], data['atsCertField_id'] , 'macr');   
                 } else {
                     $('#modal_waiting').on('shown.bs.modal', function(e){   
                         f_macr_generate_workbook(data['atsField_id']);
                         $('#modal_waiting').modal('hide');
                         $(this).unbind(e);
-                    }).modal('show');    
+                    }).modal('show');                    		
+                    $("#datatable_macr_workSummary tbody tr").removeClass('bg-color-yellow txt-color-white');
+                    $(this).addClass('bg-color-yellow txt-color-white');
                 }
             }
         });
@@ -645,7 +646,7 @@
             macr_otable = otable;
             macr_load_type = load_type;
             $('.macr_viewOnly').prop('disabled',true);
-            $('.macr_editView, .macr_div_costing, .macr_div_result, .macr_div_sample, .macr_div_workbook, .macr_div_workbook2, .macr_div_action, .macr_attachEdit').hide();
+            $('.macr_editView, .macr_div_costing, .macr_div_result, .macr_div_sample, .macr_div_workbook, .macr_div_workbook2, .macr_div_action, .macr_attachEdit, .macr_div_upload').hide();
             f_get_general_info('aotd_lab', {lab_id:'ATS'}, 'macr');
             var cert_info = f_get_general_info('vw_ats_cert', {atsCert_id:atsCert_id}, 'macr');
             $('#macr_atsCert_cycle').val(cert_info.atsCert_cycle);
@@ -660,11 +661,12 @@
                 macr_otable_workSummary.columns(5).visible(false);
                 if (data_macr_workSummary.length > 0) {
                     f_macr_generate_workbook(data_macr_workSummary[0].atsField_id);
-                    $('#datatable_macr_workSummary tbody tr').eq(0).addClass('bg-color-yellow txt-color-white');
+                    if (data_macr_workSummary.length > 1)
+                        $('#datatable_macr_workSummary tbody tr').eq(0).addClass('bg-color-yellow txt-color-white');
                 }
                 data_macr_upload = f_get_general_info_multiple('dt_document', {document_sampleCode:'%'+cert_info.atsCert_no+'%'}, {}, '', 'document_sampleCode');
                 f_dataTable_draw(macr_otable_upload, data_macr_upload, 'datatable_macr_upload', 6);
-                $('.macr_attachEdit').hide();
+                $('.macr_div_upload').show();
             } 
             var task_turn = 1;
             var wf_task;

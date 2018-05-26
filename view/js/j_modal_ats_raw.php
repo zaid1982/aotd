@@ -219,6 +219,12 @@
             var atsTest_name = f_get_value_from_table('ats_test', 'atsTest_id', ats_field.atsTest_id, 'atsTest_name');
             $('#lmarw_atsTest_name').html(atsTest_name);
             var ats_cert_field = f_get_general_info('ats_cert_field', {atsCert_id:ats_sample_info.atsCert_id, atsField_id:atsField_id});
+            if (!ats_cert_field) {
+                $('#modal_waiting').modal('hide');
+                $(this).unbind(e);
+                f_notify(2, 'Error', 'Please set the Formula first from Test Summary table.');    
+                return false;
+            }
             var ats_formula = f_get_general_info('ats_formula', {atsFormula_id:ats_cert_field.atsFormula_id});
             if (load_type == 1) {            
                 $('#marw_title').html('Set Test Result');

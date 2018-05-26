@@ -118,7 +118,10 @@
                                             <input type="hidden" id="lmism_atsTest_name" name="lmism_atsTest_name" />
                                             <input type="hidden" id="lmism_atsTest_cat" name="lmism_atsTest_cat" />
                                             <div class="pull-right">
+                                                <button type="submit" class="btn btn-xs btn-primary malt_editView" data-placement="left" data-original-title="Cover Letter View" name="coverletter"><i class="fa fa-file-pdf-o"></i> Cover Letter</button>
                                                 <button type="submit" class="btn btn-xs btn-success malt_editView" data-placement="left" data-original-title="Certificate View" name="certificate"><i class="fa fa-certificate"></i> Certificate</button>
+                                                <button type="submit" class="btn btn-xs btn-warning malt_editView" data-placement="left" data-original-title="Digital Copy View" name="digital"><i class="fa fa-file-pdf-o"></i> Digital Copy</button>
+                                                <button type="submit" class="btn btn-xs btn-info malt_editView" data-placement="left" data-original-title="Memorandom View" name="memorandum"><i class="fa fa-certificate"></i> Memorandum</button>
                                                 <!--<a href="javascript:void(0);" class="btn btn-xs btn-success  malt_editView" onclick="f_malc_load_component(1, '', 'malt');" rel="tooltip" data-placement="left" data-original-title="Certificate View"><i class="fa fa-certificate"></i> Certificate</a>&nbsp;&nbsp;-->
                                                 <!--<a href="javascript:void(0);" class="btn btn-xs btn-warning  malt_editView" onclick="f_malc_load_component(1, '', 'malt');" rel="tooltip" data-placement="left" data-original-title="Download Certificate"><i class="fa fa-file-pdf-o"></i> Digital Copy</a>-->
                                             </div><br>

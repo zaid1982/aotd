@@ -67,7 +67,19 @@ if (isset($_POST["certificate"])) {
     $pdf->AddPage();
 
     $pdf->SetFont('times', '', 10);
-
+        
+    $sql = "SELECT
+            ats_test.atsTest_id AS atsTest_id,
+            ats_test.atsTest_name AS atsTest_name,
+            ats_field.atsField_id AS atsField_id,
+            ats_field.atsField_name AS atsField_name
+        FROM ats_cert_field 
+        LEFT JOIN ats_field ON ats_field.atsField_id = ats_cert_field.atsField_id
+        LEFT JOIN ats_test ON ats_test.atsTest_id = ats_field.atsTest_id
+        WHERE atsCert_id = ".$_POST["lmism_atsCert_id"]; 
+    log_debug(__LINE__, $sql, $GLOBALS['log_dir']);
+    $arr_ats_cert_test = mysqli_query(get_connect(), $sql); 
+        
     $content = '
             <br/><br/>
             <h3 align="center">CERTIFICATE OF ANALYSIS<br/><br/><br/><br/></h3>
@@ -95,13 +107,19 @@ if (isset($_POST["certificate"])) {
             <table border="0" cellpadding="4">
             <thead>
                 <tr>
-                    <th width="170" align="center"><u>Test</u></th>
-                    <th width="170" align="center"><u>Test Method</u></th>
-                    <th width="170" align="center"><u>Results</u></th>
+                    <th width="140" align="center"><u>Test</u></th>
+                    <th width="380" align="center"><u>Test Method</u></th>
                 </tr>
-            </thead>
-            </table>
-            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+            </thead>';
+            foreach($arr_ats_cert_test as $ats_cert_test) {
+                $content .= '
+                <tr>
+                    <td width="170" align="left">'.$ats_cert_test["atsTest_name"].'</td>
+                    <td width="340" align="left">'.$ats_cert_test["atsField_name"].'</td>
+                </tr> ';
+            }  
+            $content .= '</table>
+            <br/><br/><br/><br/><br/><br/><br/><br/>
             Report issued by,
             <br/><br/><br/><br/><br/>
             ..........................................
@@ -116,28 +134,6 @@ if (isset($_POST["certificate"])) {
             <br><br><br>
            (This is a computer generated certificate. No signature is required.)
             ';
-//    $sql = "SELECT
-//                    ats_cert_test.atsCertTest_id AS atsCertTest_id,
-//                    ats_cert_test.atsCert_id AS atsCert_id,
-//                    ats_test.atsTest_name AS atsTest_name,
-//                    ats_test.atsTest_cat AS atsTest_cat
-//                FROM ats_cert_test 
-//                LEFT JOIN ats_test ON ats_test.atsTest_id = ats_cert_test.atsTest_id
-//                LEFT JOIN ats_sample_log ON ats_sample_log.atsCert_id = ats_cert_test.atsCert_id";
-//    $result = mysqli_query(mysqli_connect('addeen-legacy.com.my', 'addeenle_aotd', '', 'addeenle_aotd'), $sql); 
-//    $bil = 1;
-//    while($row = mysqli_fetch_assoc($result))  
-//    { 
-//        $content .= '
-//            <tr>
-//                <td align="center">'.$row["atsTest_name"].'</td>
-//                <td align="center">'.$row["atsTest_cat"].'</td>
-//                <td align="center"></td>
-//            </tr> ';
-//    }
-//        $content.= '                
-//            </tbody>
-//            </table>';
     $pdf->writeHTML($content, true, false, true, false, '');
 
     $pdf->AddPage();
@@ -156,15 +152,44 @@ if (isset($_POST["certificate"])) {
             </table>
             <table border="1" cellpadding="4">
                 <thead>
-                    <tr>
-                        <th align="center">Lab Sample Code</th>
-                        <th align="center">Customer Sample Code</th>
-                        <th align="center">Result</th>
+                    <tr style="background-color: black; color: white;">
+                        <th align="center" width="30%"><strong>Lab Sample Code</strong></th>
+                        <th align="center" width="55%"><strong>Customer Sample Code</strong></th>
+                        <th align="center" width="15%"><strong>Result</strong></th>
                     </tr>
                 </thead>
+                <tbody>';
+        foreach($arr_ats_cert_test as $ats_cert_test) {         
+            $content .= '
+                <tr>
+                    <td align="left" colspan="3">'.$ats_cert_test["atsTest_name"].' : '.$ats_cert_test["atsField_name"].'</td>
+                </tr> ';
+            $sql = "SELECT
+                    ats_sample_info.atsLab_code AS atsLab_code,
+                    ats_sample_info.atsLab_sampleCode AS atsLab_sampleCode,
+                    ats_field.atsField_name AS atsField_name,
+                    ats_res.atsRes_res AS atsRes_res
+                FROM ats_sample_info 
+                LEFT JOIN ats_cert_test ON ats_cert_test.atsCert_id = ats_sample_info.atsCert_id
+                LEFT JOIN ats_field ON ats_field.atsTest_id = ats_cert_test.atsTest_id
+		LEFT JOIN ats_res ON ats_res.atsLab_id = ats_sample_info.atsLab_id AND ats_res.atsField_id = ats_field.atsField_id
+                WHERE ats_sample_info.atsCert_id = ".$_POST["lmism_atsCert_id"]." AND ats_field.atsField_id = ".$ats_cert_test['atsField_id'];
+            log_debug(__LINE__, $sql, $GLOBALS['log_dir']);
+            $result = mysqli_query(get_connect(), $sql); 
+            while($row = mysqli_fetch_assoc($result))  
+            { 
+                $content .= '
+                <tr>
+                    <td align="center" width="30%">'.$row["atsLab_code"].'</td>
+                    <td width="55%">'.$row["atsLab_sampleCode"].'</td>
+                    <td align="center" width="15%">'.$row["atsRes_res"].'</td>
+                </tr> ';
+            }
+        }
+    $content .= '</tbody>
             </table>
-            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+            <br/><br/><br/><br/>
+            <br/><br/><br/><br/>
             Report issued by,
             <br/><br/><br/><br/><br/>
             ..........................................
@@ -189,6 +214,144 @@ if (isset($_POST["certificate"])) {
 
     $pdf->Output('certificate.pdf', 'I');
 } 
+else if (isset($_POST["coverletter"])) {
+
+    class MYPDF extends TCPDF {
+
+        public function Header() {
+            $this->SetFont('times', '', 12);
+            $html = '<table border="0" cellpadding="4">
+                <tr>
+                    <th width="100" align="center"><img src="../../img/mpob.PNG" alt="MPOB"  width="50"></th>
+                    <th width="400" align="center">
+                        <strong>MALAYSIAN PALM OIL BOARD</strong><br/>
+                        <strong>ADVANCED OLEOCHEMICAL TECHNOLOGY DIVISION</strong><br/>
+                        ANALYTICAL TESTING SERVICES LABORATORY
+                    </th>
+                </tr>
+            </table><hr>';
+            $this->writeHTML($html);
+        }
+
+        public function Footer() {
+            $this->SetY(-25);
+            $this->SetFont('times', '', 9);
+            //$html = 'PAGE '.$this->getAliasNumPage().' OF '.$this->getAliasNbPages().'<hr><br/><br/>';
+            $html = '<table border="0" cellpadding="4">
+                <tr>
+                    <th align="center">PAGE ' . $this->getAliasNumPage() . ' OF ' . $this->getAliasNbPages() . '</th>
+                </tr>
+            </table>
+            <hr>
+            <table border="0" cellpadding="4">
+                <tr>
+                    <th align="center">No.6, Persiaran Institusi, Bandar Baru Bangi, 43000 Kajang, Selangor, Malaysia Tel: +603-87694280 Fax: +603-89222012<br/>E-mail: razmah@mpob.gov.my or hajar@mpob.gov.my  Website: http://portal.mpob.gov.my/aotd/index.htm</th>
+                </tr>
+            </table>';
+            $this->writeHTML($html);
+        }
+
+    }
+
+    // create new PDF document
+    $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+    // set document information
+    $pdf->SetCreator(PDF_CREATOR);
+    $pdf->SetTitle('cover letter');
+
+    // set default header data
+    $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE . ' 009', PDF_HEADER_STRING);
+
+    // set header and footer fonts
+    $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+    $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+    // set default monospaced font
+    $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+    // set margins
+    $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+    $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+    $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+    // set auto page breaks
+    $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+    $pdf->AddPage();
+
+    $pdf->SetFont('times', '', 10);
+
+    $content = <<<EOD
+            <br><br><br>
+        <table border="0" cellpadding="4">
+                <tr>
+                    <th align="left">
+                        18 July 2013<br><br>
+                    </th>
+                </tr>
+                <tr>
+                    <th align="left">
+                        Sime Darby Research Sdn. Bhd<br>
+                        R&D Centre Carey Islan - Downstream,<br>
+                        Lot 2664, Jalan Pulau Carey,<br>
+                        42960 Kuala Langat,<br>
+                        Selangor<br><br>
+                    </th>
+                </tr>
+                <tr>
+                    <th align="left">
+                        (Attention : Cik Nurdiyana Binti Muhamad Johari)<br><br><br> 
+                    </th>
+                </tr>
+                <tr>
+                    <th align="left">
+                        Dear Sir/Madam,<br> 
+                    </th>
+                </tr>
+                <tr>
+                    <th align="left">
+                        <b>RESULT OF ANALYSIS</b> <br>
+                    </th>
+                </tr>
+                <tr>
+                    <th align="left">
+                        With reference to your mail dated 3 July 2013, we enclosed here with the certificate of analysis <br>
+                        (Cert. No. QEA/ATS/EXT/NAC/102-13) of the samples sent in by you. <br>
+                    </th>
+                </tr>
+                <tr>
+                    <th align="left">
+                        Our Accounts Department will send the invoice for the services provided under separate cover. <br>
+                    </th>
+                </tr>
+                <tr>
+                    <th align="left">
+                        Thank You <br><br><br><br>
+                    </th>
+                </tr>
+                <tr>
+                    <th align="left">
+                        Your sincerely, <br><br><br><br>
+                    </th>
+                </tr>
+                <tr>
+                    <th align="left">
+                        .................................................. <br>
+                        DR. HAMZAH ABU HASSAN <br>
+                        Director<br>
+                        Advance Oleochemical Technology Division<br>
+                        Malaysia Palm Oil Board
+                    </th>
+                </tr>
+                
+            </table>
+            
+EOD;
+    $pdf->writeHTML($content, true, false, true, false, '');
+
+    $pdf->Output('coverletter.pdf', 'I');
+}
 
 else if (isset($_POST["cover"])) {
 
