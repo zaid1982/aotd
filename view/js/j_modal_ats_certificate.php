@@ -705,6 +705,7 @@
             }            
             data_macr_history = f_get_general_info_multiple('dt_task_history', {wfTrans_id:(cert_info.wfTrans_id!=null?cert_info.wfTrans_id:'0')}, '', '', 'wfTask_id');
             f_dataTable_draw(macr_otable_history, data_macr_history, 'datatable_macr_history', 6);
+            $('#lmacr_atsCert_condition').html(cert_info.atsCondition_desc!=null?cert_info.atsCondition_desc:cert_info.atsCert_condition);
             $('#macr_wfTask_id').val(wfTask_id);
             $('#modal_ats_certificate').modal('show');
             $('#modal_waiting').modal('hide');

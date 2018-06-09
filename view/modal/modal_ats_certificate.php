@@ -82,6 +82,12 @@
                                     </div>
                                 </div>
                                 <div class="form-group no-margin">      
+                                    <label class="col-md-6 control-label"><strong>Type of Sample</strong></label>
+                                    <div class="col-md-6 control-label text-align-left">
+                                        <span id="lmacr_atsType_desc"></span> 
+                                    </div>
+                                </div>
+                                <div class="form-group no-margin">      
                                     <label class="col-md-6 control-label"><strong>Sample Condition</strong></label>
                                     <div class="col-md-6 control-label text-align-left">
                                         <span id="lmacr_atsCert_condition"></span> 

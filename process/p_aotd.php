@@ -103,7 +103,7 @@ try {
             if (empty($_POST['masl_atsCert_id']))   throw new Exception('(ErrCode:6810) [' . __LINE__ . '] - Parameter atsCert_id empty.');
             $atsCert_equipment = (!empty($_POST['masl_atsCert_equipment'])) ? $_POST['masl_atsCert_equipment'] : '0';
             $atsCert_chemical = (!empty($_POST['masl_atsCert_chemical'])) ? $_POST['masl_atsCert_chemical'] : '0';
-            $result = Class_db::getInstance()->db_update('ats_sample_log', array('atsCert_equipment'=>$atsCert_equipment, 'atsCert_chemical'=>$atsCert_chemical, 'atsCert_remark'=>$_POST['masl_atsCert_remark'], 'atsCert_condition'=>$_POST['masl_atsCert_condition']), array('atsCert_id'=>$_POST['masl_atsCert_id']));
+            $result = Class_db::getInstance()->db_update('ats_sample_log', array('atsCert_equipment'=>$atsCert_equipment, 'atsCert_chemical'=>$atsCert_chemical, 'atsCert_remark'=>$_POST['masl_atsCert_remark'], 'atsType_id'=>$_POST['masl_atsType_id'], 'atsCondition_id'=>$_POST['masl_atsCondition_id']), array('atsCert_id'=>$_POST['masl_atsCert_id']));
             $atsCert_no = Class_db::getInstance()->db_select_col('ats_sample_log', array('atsCert_id'=>$_POST['masl_atsCert_id']), 'atsCert_no', NULL, 1);
             $fn_task->save_audit (110, $atsCert_no);
         } else if ($_POST['funct'] == 'create_ats_cert') {
@@ -125,7 +125,7 @@ try {
             $atsCert_equipment = (!empty($_POST['masl_atsCert_equipment'])) ? $_POST['masl_atsCert_equipment'] : '0';
             $atsCert_chemical = (!empty($_POST['masl_atsCert_chemical'])) ? $_POST['masl_atsCert_chemical'] : '0';
             $cert_id = Class_db::getInstance()->db_insert('ats_sample_log', array('wfTrans_id'=>$wfTrans_id, 'atsCert_no'=>$cert_no, 'client_id'=>$_POST['masl_client_id'], 'atsCert_totalSample'=>$_POST['masl_atsCert_totalSample'],
-                'atsCert_accredited'=>$atsCert_accredited, 'clientType_id'=>$source, 'atsCert_equipment'=>$atsCert_equipment, 'atsCert_chemical'=>$atsCert_chemical, 'atsCert_condition'=>$_POST['masl_atsCert_condition'], 'atsCert_remark'=>$_POST['masl_atsCert_remark']));
+                'atsCert_accredited'=>$atsCert_accredited, 'clientType_id'=>$source, 'atsCert_equipment'=>$atsCert_equipment, 'atsCert_chemical'=>$atsCert_chemical, 'atsType_id'=>$_POST['masl_atsType_id'], 'atsCondition_id'=>$_POST['masl_atsCondition_id'], 'atsCert_remark'=>$_POST['masl_atsCert_remark']));
             for ($i=1;$i<=intVal($_POST['masl_atsCert_totalSample']);$i++) {
                 $barcode_no = $inx.$year.$i.'A';
                 Class_db::getInstance()->db_insert('ats_sample_info', array('atsCert_no'=>$cert_no, 'atsCert_id'=>$cert_id, 'atsLab_code'=>$cert_no.'/'.$i, 'atsLab_barCode'=>$barcode_no));

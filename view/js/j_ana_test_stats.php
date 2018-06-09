@@ -4,6 +4,10 @@
     get_option_data('tsr_srch_test', arr_field, 'atsTest_id', 'atsTest_name', 'All Test');
           
     $(document).ready(function () {
+
+        $('#btn_tsr_reset').click(function () {
+            $("#form_tsr_search").data('bootstrapValidator').resetForm();  
+        });
         
         $('#form_tsr_search').bootstrapValidator({
             excluded: [':disabled'],

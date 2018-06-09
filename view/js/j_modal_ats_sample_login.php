@@ -54,12 +54,18 @@
                             message: 'Chemical/Glassware is required'
                         }
                     }
-                },                          
-                masl_atsCert_condition : {
+                },                             
+                masl_atsType_id : {
                     validators: {
-                        stringLength : {
-                            max : 100,
-                            message : 'Sample Condition must not more than 100 characters'
+                        notEmpty : {
+                            message : 'Type of Sample is required'
+                        }
+                    }
+                },                          
+                masl_atsCondition_id : {
+                    validators: {
+                        notEmpty : {
+                            message : 'Sample Condition is required'
                         }
                     }
                 },                          
@@ -116,6 +122,8 @@
             if (masl_1st_load) {
                 get_option('masl_client_id', '0', 'aotd_client_info', 'client_id', 'client_organisation', 'client_black');
                 get_option('masl_atsTest_id', '1', 'ats_test', 'atsTest_id', 'atsTest_name', 'atsTest_status', '');
+                get_option('masl_atsType_id', '1', 'ats_type', 'atsType_id', 'atsType_desc', 'atsType_status', ' ', 'ref_id');
+                get_option('masl_atsCondition_id', '1', 'ats_condition', 'atsCondition_id', 'atsCondition_desc', 'atsCondition_status', ' ', 'ref_id');
                 masl_1st_load = false;
             }
             $('#masl_client_id').val('').trigger('change');

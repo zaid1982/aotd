@@ -12,10 +12,6 @@
     var data_mpr_workbook = '';
     var mpr_otable_upload;
     var data_mpr_upload;
-    
-    $(document).ready(function () {
-        
-    });
         
     function f_mpr_load_certificate(load_type, phyRep_no, wfTask_id, otable) {
         $('#modal_waiting').on('shown.bs.modal', function(e){

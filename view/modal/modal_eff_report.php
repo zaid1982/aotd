@@ -112,11 +112,12 @@
                 </div>
             </div>            
             <div class="modal-footer padding-10">
-                <form class="form-horizontal" id="form_mer" method="post" target="_blank" action="process/pdf/report.php">
+                <form class="form-horizontal" id="form_mer" method="post" target="_blank" action="pdf/eff.php">
                     <input type="hidden" name="funct" id="mer_funct" />
                     <input type="hidden" name="mer_effRep_no" id="mer_effRep_no" />
                     <input type="hidden" name="mer_lab_name" id="mer_lab_name" />
                     <input type="hidden" name="mer_effTest_name" id="mer_effTest_name" />
+                    <input type="hidden" name="mer_effTest_cost" id="mer_effTest_cost" />
                     <input type="hidden" name="mer_client_pic" id="mer_client_pic" />
                     <input type="hidden" name="mer_client_organisation" id="mer_client_organisation" />
                     <input type="hidden" name="mer_client_address" id="mer_client_address" />
@@ -130,6 +131,7 @@
                     <input type="hidden" name="mer_timeCompleted" id="mer_timeCompleted" />
                     <input type="hidden" name="mer_name_head_unit" id="mer_name_head_unit" />
                     <input type="hidden" name="mer_name_quality_manager" id="mer_name_quality_manager" />
+                    <input type="hidden" name="mer_name_technical_manager2" id="mer_name_technical_manager2" />
                     <input type="hidden" name="mer_profile_designation" id="mer_profile_designation" />
                     <input type="hidden" name="mer_effRep_totalSample" id="mer_effRep_totalSample" />
                     <input type="hidden" name="mer_effRep_physical" id="mer_effRep_physical" />

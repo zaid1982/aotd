@@ -1,17 +1,17 @@
 <?php
 date_default_timezone_set("Asia/Kuala_Lumpur"); 
-require_once('../../tcpdf/tcpdf.php');
+require_once('../tcpdf/tcpdf.php');
 
-$config = parse_ini_file('../../library/config.ini');
+$config = parse_ini_file('../library/config.ini');
 $log_dir = $config['log_dir'];
 
 function log_debug($line, $msg, $log_dir) {
     $debugMsg = date("Y/m/d h:i:sa")." [".__FILE__.":".$line."] - ".$msg."\r\n";
-    error_log($debugMsg, 3, '../'.$log_dir.'/debug/debug_'.date("Ymd").'.log');
+    error_log($debugMsg, 3, $log_dir.'/debug/debug_'.date("Ymd").'.log');
 }
 
 function get_connect() {
-    $config = parse_ini_file('../../library/config.ini');
+    $config = parse_ini_file('../library/config.ini');
     $dbname = $config['dbname'];    
     $dbhost = $config['dbhost'];
     $connect = mysqli_connect($dbhost, $config['username'], $config['password'], $dbname);
@@ -239,17 +239,16 @@ function get_resultPhy($phyRep_no)  {
                         <tr>
                             <td align="center">Field</td>
                             <td align="center">Result</td>
-                        </tr>
-';
+                        </tr>';
         $sql1 = "SELECT
-phy_sample_info.phyLab_sampleCode AS phyLab_sampleCode,
-phy_test_res.*,
-phy_field.phyField_name AS phyField_name,
-phy_field.phyField_status AS phyField_status
-FROM phy_test_res 
-LEFT JOIN phy_field ON phy_field.phyField_id = phy_test_res.phyField_id
-LEFT JOIN phy_sample_info ON phy_sample_info.phyLab_code = phy_test_res.phyLab_code
-WHERE phy_test_res.phyLab_code = '".$row["phyLab_code"]."'";
+                phy_sample_info.phyLab_sampleCode AS phyLab_sampleCode,
+                phy_test_res.*,
+                phy_field.phyField_name AS phyField_name,
+                phy_field.phyField_status AS phyField_status
+                FROM phy_test_res 
+                LEFT JOIN phy_field ON phy_field.phyField_id = phy_test_res.phyField_id
+                LEFT JOIN phy_sample_info ON phy_sample_info.phyLab_code = phy_test_res.phyLab_code
+                WHERE phy_test_res.phyLab_code = '".$row["phyLab_code"]."'";
         log_debug(__LINE__, $sql1, $GLOBALS['log_dir']);
         $result1 = mysqli_query(get_connect(), $sql1);    
         while($row1 = mysqli_fetch_assoc($result1))  
@@ -257,6 +256,47 @@ WHERE phy_test_res.phyLab_code = '".$row["phyLab_code"]."'";
             $output .= '<tr>
                             <td>'.$row1['phyField_name'].'</td>
                             <td>'.$row1['phyRes_res'].'</td>
+                        </tr>';
+        }
+        $output .= '</table><br/><br/>';
+    }  
+    
+    return $output;
+}
+
+function get_resultEff($effRep_no)  {
+    $whereSearch = "WHERE effRep_no = '".$effRep_no."'";
+    $output = '';
+    $sql = "SELECT * FROM eff_sample_info ".$whereSearch;
+    log_debug(__LINE__, $sql, $GLOBALS['log_dir']);
+    $result = mysqli_query(get_connect(), $sql);    
+    while($row = mysqli_fetch_assoc($result))  
+    {   
+        $output .= '<table border="0"><tr><td>Client Sample Code: '.$row['effLab_sampleCode'].'</td><td>Lab Code: '.$row['effLab_code'].'</td></tr></table><br/><br/>';
+        $output .= '<table border="1" cellpadding="4"> 
+                        <tr>
+                            <td colspan="2" align="center">Test Result</td>
+                        </tr>
+                        <tr>
+                            <td align="center">Field</td>
+                            <td align="center">Result</td>
+                        </tr>';
+        $sql1 = "SELECT
+                eff_sample_info.effLab_sampleCode AS effLab_sampleCode,
+                eff_test_res.*,
+                eff_field.effField_name AS effField_name,
+                eff_field.effField_status AS effField_status
+                FROM eff_test_res 
+                LEFT JOIN eff_field ON eff_field.effField_id = eff_test_res.effField_id
+                LEFT JOIN eff_sample_info ON eff_sample_info.effLab_code = eff_test_res.effLab_code
+                WHERE eff_test_res.effLab_code = '".$row["effLab_code"]."'";
+        log_debug(__LINE__, $sql1, $GLOBALS['log_dir']);
+        $result1 = mysqli_query(get_connect(), $sql1);    
+        while($row1 = mysqli_fetch_assoc($result1))  
+        { 
+            $output .= '<tr>
+                            <td>'.$row1['effField_name'].'</td>
+                            <td>'.$row1['effRes_res'].'</td>
                         </tr>';
         }
         $output .= '</table><br/><br/>';
@@ -305,6 +345,76 @@ function get_samplePhy($no)  {
     while($row = mysqli_fetch_assoc($result))  
     {   
         $output .= $row["phyLab_sampleCode"]."<br/>";
+    }  
+    return $output;
+}
+
+function get_sampleAna($no)  {
+    $whereSearch = "WHERE atsCert_id = '".$no."'";
+    $output = '';
+    $sql = "SELECT * FROM ats_sample_info ".$whereSearch;
+    log_debug(__LINE__, $sql, $GLOBALS['log_dir']);
+    $result = mysqli_query(get_connect(), $sql);    
+    while($row = mysqli_fetch_assoc($result))  
+    {   
+        $output .= $row["atsLab_sampleCode"]."<br/>";
+    }  
+    return $output;
+}
+
+function get_testAna($no)  {
+    $whereSearch = "WHERE ats_sample_log.atsCert_id = '".$no."'";
+    $output = '';
+    $jumlah = 0;
+    $sql = "SELECT
+    ats_sample_log.atsCert_id AS atsCert_id,
+    ats_test.atsTest_name AS atsTest_name,
+    ats_test.atsTest_cost AS atsTest_cost,
+    ats_sample_log.atsCert_totalSample AS atsCert_totalSample,
+    1 AS atsCount_test
+FROM ats_sample_log
+LEFT JOIN ats_cert_test ON ats_cert_test.atsCert_id = ats_sample_log.atsCert_id
+LEFT JOIN ats_test ON ats_test.atsTest_id = ats_cert_test.atsTest_id ".$whereSearch;
+    log_debug(__LINE__, $sql, $GLOBALS['log_dir']);
+    $result = mysqli_query(get_connect(), $sql);    
+    while($row = mysqli_fetch_assoc($result))  
+    {   
+        $jumlah = floatval($row['atsTest_cost'])*intval($row['atsCert_totalSample']) + $jumlah;
+        $output .= '<tr>
+                    <th width="40%">'.$row['atsTest_name'].'</th>
+                    <th width="15%" align="right">'.floatval($row['atsTest_cost']).'</th>
+                    <th width="15%" align="right">'.intval($row['atsCert_totalSample']).'</th>
+                    <th width="15%" align="right">'.intval($row['atsCount_test']).'</th>
+                    <th width="15%" align="right">'.floatval($row['atsTest_cost'])*intval($row['atsCert_totalSample']).'</th>
+                </tr>';
+    }  
+    $jumlahs = floatval($jumlah);
+    $gst = (floatval($jumlah))*0.06;
+    $aftergst = $jumlahs + $gst;
+    $output .= '<tr>
+                    <th width="85%" align="right">JUMLAH</th>
+                    <th width="15%" align="right">RM '.floatval($jumlah).'</th>
+                </tr>
+                <tr>
+                    <th width="85%" align="right">GST (6%)</th>
+                    <th width="15%" align="right">RM '.(floatval($jumlah))*0.06.'</th>
+                </tr>
+                <tr>
+                    <th width="85%" align="right">JUMLAH TERMASUK GST</th>
+                    <th width="15%" align="right">RM '.floatval($aftergst).'</th>
+                </tr>';
+    return $output;
+}
+
+function get_sampleEff($no)  {
+    $whereSearch = "WHERE effRep_no = '".$no."'";
+    $output = '';
+    $sql = "SELECT * FROM eff_sample_info ".$whereSearch;
+    log_debug(__LINE__, $sql, $GLOBALS['log_dir']);
+    $result = mysqli_query(get_connect(), $sql);    
+    while($row = mysqli_fetch_assoc($result))  
+    {   
+        $output .= $row["effLab_sampleCode"]."<br/>";
     }  
     return $output;
 }

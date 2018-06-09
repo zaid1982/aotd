@@ -30,7 +30,7 @@
                     </header>
                     <div>
                         <div class="widget-body">
-                            <form class="form-horizontal" id="form_itr_search" method="post" target="_blank" action="process/pdf/report.php">
+                            <form class="form-horizontal" id="form_itr_search" method="post" target="_blank" action="pdf/report.php">
                                 <div class="form-group">
                                     <label class="col-md-3 control-label font-xs">Username</label>
                                     <div class="col-md-4">   
@@ -226,6 +226,9 @@
                                 <div class="widget-footer">  
                                     <button type="submit" class="btn btn-labeled btn-primary" id="invReport" name="invReport">
                                         <span class="btn-label"><i class="fa fa-file-pdf-o"></i></span>Generate Report
+                                    </button>
+                                    <button type="reset" class="btn btn-labeled btn-warning" id="btn_itr_reset">
+                                        <span class="btn-label"><i class="fa fa-refresh"></i></span>Reset
                                     </button>
                                 </div>
                             </form>

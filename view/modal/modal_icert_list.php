@@ -18,14 +18,13 @@
                                 </header>
                                 <div>
                                     <div class="widget-body">      
-                                        <form class="form-horizontal mism_infoView" id="form_lmism" method="post" target="_blank" action="process/pdf/report.php">
+                                        <form class="form-horizontal mism_infoView" id="form_lmism" method="post" target="_blank" action="pdf/report.php">
                                             <div class="form-group no-margin">
                                                 <label class="col-md-3 control-label"><strong>Certificate No</strong></label>
                                                 <div class="col-md-9 control-label text-align-left">
                                                     <span id="atsCert_no"></span>
                                                 </div>
-                                                <input type="hidden" id="lmism_atsCert_no" name="lmism_atsCert_no" />
-                                                <input type="hidden" id="atsCert_no1" name="atsCert_no1" />
+                                                
                                             </div>
                                             <div class="form-group no-margin">
                                                 <label class="col-md-3 control-label"><strong>Sample Status</strong></label>
@@ -39,19 +38,14 @@
                                                     <span id="client_organisation"></span>
                                                     <!--<span id="client_organisation1"></span>-->
                                                 </div>
-                                                <input type="hidden" id="lmism_client_organisation" name="lmism_client_organisation" />
-                                                <input type="hidden" id="lmism_client_address" name="lmism_client_address" />
-                                                <input type="hidden" id="lmism_client_postcode" name="lmism_client_postcode" />
-                                                <input type="hidden" id="lmism_client_city" name="lmism_client_city" />
-                                                <input type="hidden" id="lmism_client_state" name="lmism_client_state" />
-                                                <input type="hidden" id="client_organisation1" name="client_organisation1" />
+
                                             </div>
                                             <div class="form-group no-margin">
                                                 <label class="col-md-3 control-label"><strong>Attention</strong></label>
                                                 <div class="col-md-9 control-label text-align-left">
                                                     <span id="client_pic"></span>
                                                 </div>
-                                                <input type="hidden" id="lmism_client_pic" name="lmism_client_pic" />
+                                                
                                             </div>
                                             <div class="form-group no-margin">
                                                 <label class="col-md-3 control-label"><strong>Accredited</strong></label>
@@ -112,8 +106,18 @@
                                                 <div class="col-md-9 control-label text-align-left">
                                                     <span id="atsCert_timeReported"></span>
                                                 </div>
-                                                <input type="hidden" id="lmism_atsCert_timeReported" name="lmism_atsCert_timeReported" />
+                                                
                                             </div>
+                                            <input type="hidden" id="lmism_atsCert_no" name="lmism_atsCert_no" />
+                                            <input type="hidden" id="lmism_client_pic" name="lmism_client_pic" />
+                                            <input type="hidden" id="atsCert_no1" name="atsCert_no1" />
+                                            <input type="hidden" id="lmism_client_organisation" name="lmism_client_organisation" />
+                                            <input type="hidden" id="lmism_client_address" name="lmism_client_address" />
+                                            <input type="hidden" id="lmism_client_postcode" name="lmism_client_postcode" />
+                                            <input type="hidden" id="lmism_client_city" name="lmism_client_city" />
+                                            <input type="hidden" id="lmism_client_state" name="lmism_client_state" />
+                                            <input type="hidden" id="client_organisation1" name="client_organisation1" />
+                                            <input type="hidden" id="lmism_atsCert_timeReported" name="lmism_atsCert_timeReported" />
                                             <input type="hidden" name="lmism_atsCert_id" id="lmism_atsCert_id" />
                                             <input type="hidden" id="lmism_atsTest_name" name="lmism_atsTest_name" />
                                             <input type="hidden" id="lmism_atsTest_cat" name="lmism_atsTest_cat" />

@@ -1,6 +1,10 @@
 <script type="text/javascript">
     
     $(document).ready(function () {
+
+        $('#btn_ers_reset').click(function () {
+            $("#form_ers_search").data('bootstrapValidator').resetForm();  
+        });
         
         $('#form_ers_search').bootstrapValidator({
             excluded: [':disabled'],

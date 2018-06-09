@@ -30,7 +30,7 @@
                         <div class="widget-body">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <form method="post" target="_blank" action="process/pdf/report.php">
+                                    <form method="post" target="_blank" action="pdf/report.php">
                                         <button type="submit" class="btn btn-primary" name="certificate1">
                                             <i class=""></i> Certificate
                                         </button>  

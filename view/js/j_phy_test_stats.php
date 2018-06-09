@@ -53,6 +53,10 @@
             }
         });
 
+        $('#btn_pts_reset').click(function () {
+            $("#form_pts_search").data('bootstrapValidator').resetForm();  
+        });
+
     });
 
 </script>

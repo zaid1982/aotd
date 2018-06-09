@@ -7,6 +7,11 @@
     $(document).ready(function () {
 
         pageSetUp();
+
+        $('#btn_itr_reset').click(function () {
+            $("#form_itr_search").data('bootstrapValidator').resetForm();  
+        });
+
         $('#form_itr_search').bootstrapValidator({
             excluded: ':disabled', 
             fields: {

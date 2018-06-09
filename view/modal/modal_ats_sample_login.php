@@ -74,10 +74,16 @@
                         </div>
                     </div>
                     <div class="form-group">      
-                        <label class="col-md-4 control-label">Sample Condition</label>
-                        <div class="col-md-8">
-                            <input type="text" class="form-control" name="masl_atsCert_condition" id="masl_atsCert_condition" />
-                        </div>   
+                        <label class="col-md-4 control-label"><font color="red">*</font> Type of Sample</label>
+                        <div class="col-md-8 selectContainer">
+                            <select class="form-control" name="masl_atsType_id" id="masl_atsType_id"></select>
+                        </div>  
+                    </div>
+                    <div class="form-group">      
+                        <label class="col-md-4 control-label"><font color="red">*</font> Sample Condition</label>
+                        <div class="col-md-8 selectContainer">
+                            <select class="form-control" name="masl_atsCondition_id" id="masl_atsCondition_id"></select>
+                        </div>  
                     </div>
                     <div class="form-group">
                         <label class="col-md-4 control-label">Remarks</label>

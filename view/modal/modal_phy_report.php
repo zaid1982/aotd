@@ -112,7 +112,7 @@
                 </div>
             </div>            
             <div class="modal-footer padding-10">
-                <form class="form-horizontal" id="form_mpr" method="post" target="_blank" action="process/pdf/report.php">
+                <form class="form-horizontal" id="form_mpr" method="post" target="_blank" action="pdf/phy.php">
                     <input type="hidden" name="funct" id="mpr_funct" />
                     <input type="hidden" name="mpr_lab_name" id="mpr_lab_name" />
                     <input type="hidden" name="mpr_phyRep_no" id="mpr_phyRep_no" />

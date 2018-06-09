@@ -36,6 +36,10 @@
             }
         });
 
+        $('#btn_prs_reset').click(function () {
+            $("#form_prs_search").data('bootstrapValidator').resetForm();  
+        });
+
     });
 
 </script>

@@ -463,23 +463,33 @@ class Class_sql {
                 WHERE wf_transaction.wfTrans_id IS NULL OR wf_transaction.wfTrans_status <> 2 OR (wf_transaction.wfTrans_status = 2 AND wf_transaction.wfTrans_createdBy = [user_id])";
             } else if ($title == 'vw_ats_cert') {
                 $sql = "SELECT 
+                    DATE_FORMAT(CURDATE(), '%d/%M/%Y') AS timeprint,
+                    DATE_FORMAT(atsCert_timeReceived, '%d/%M/%Y') AS timeReceived,
+                    DATE_FORMAT(atsCert_timeReported, '%d/%M/%Y') AS timeReported,
+                    DATE_FORMAT(atsCert_timeReported, '%d/%M/%Y') AS timeReported2,
                     aotd_client_info.client_organisation AS client_organisation,
                     aotd_client_info.client_address AS client_address,
                     aotd_client_info.client_postcode AS client_postcode,
                     aotd_client_info.client_city AS client_city,
                     aotd_client_info.client_state AS client_state,
                     aotd_client_info.client_pic AS client_pic,
+                    aotd_client_info.client_phoneNo AS client_phoneNo,
+                    aotd_client_info.client_faxNo AS client_faxNo,
                     ref_status.status_desc AS status_desc,
                     IF (ats_sample_log.atsCert_accredited = 1, 'Yes', 'No') AS atsCert_accrediteds,
                     IF (ats_sample_log.atsCert_equipment = 1, 'Available', 'Not Available') AS atsCert_equipments,
                     IF (ats_sample_log.atsCert_chemical = 1, 'Available', 'Not Available') AS atsCert_chemicals,
                     CONCAT(ref_title.title_desc,' ',`profile`.profile_name,' ',`profile`.profile_lastname) AS profile_fullname,
+                    ats_type.atsType_desc AS atsType_desc,
+                    ats_condition.atsCondition_desc AS atsCondition_desc,
                     ats_sample_log.*
                 FROM ats_sample_log
                 LEFT JOIN aotd_client_info ON aotd_client_info.client_id = ats_sample_log.client_id
                 LEFT JOIN ref_status ON ref_status.status_id = ats_sample_log.atsCert_status
                 LEFT JOIN `profile` on `profile`.user_id = ats_sample_log.atsCert_analyst AND `profile`.profile_status = 1
-                LEFT JOIN ref_title ON ref_title.title_id = `profile`.title_id";
+                LEFT JOIN ref_title ON ref_title.title_id = `profile`.title_id
+                LEFT JOIN ats_type ON ats_type.atsType_id = ats_sample_log.atsType_id
+                LEFT JOIN ats_condition ON ats_condition.atsCondition_id = ats_sample_log.atsCondition_id";
             } else if ($title == 'dt_ats_cert_test') {
                 $sql = "SELECT
                     ats_cert_test.atsCertTest_id AS atsCertTest_id,
@@ -1064,6 +1074,7 @@ class Class_sql {
                     aotd_client_info.client_phoneNo AS client_phoneNo,
                     aotd_client_info.client_faxNo AS client_faxNo,
                     eff_test.effTest_name AS effTest_name,
+                    eff_test.effTest_cost AS effTest_cost,
                     ref_status.status_desc AS status_desc,
                     CONCAT(ref_title.title_desc,' ',`profile`.profile_name,' ',`profile`.profile_lastname) AS profile_fullname,
                     eff_sample_log.*

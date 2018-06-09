@@ -4,6 +4,10 @@
     get_option_data('ets_srch_test', arr_field, 'effCat_id', 'effCat_name', 'All Evaluation');
           
     $(document).ready(function () {
+
+        $('#btn_ets_reset').click(function () {
+            $("#form_ets_search").data('bootstrapValidator').resetForm();  
+        });
         
         $('#form_ets_search').bootstrapValidator({
             excluded: [':disabled'],

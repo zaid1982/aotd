@@ -30,7 +30,7 @@
                     </header>
                     <div>
                         <div class="widget-body">
-                            <form class="form-horizontal" id="form_csr_search" method="post" target="_blank" action="process/pdf/report.php">
+                            <form class="form-horizontal" id="form_csr_search" method="post" target="_blank" action="pdf/ana.php">
                                 <div class="form-group">
                                     <label class="col-md-3 control-label font-xs">Sample Source</label>
                                     <div class="col-md-5">   
@@ -107,8 +107,11 @@
                                     </div>
                                 </div>
                                 <div class="widget-footer">  
-                                    <button type="submit" class="btn btn-labeled btn-primary" id="certStats" name="certStats" >
+                                    <button type="submit" class="btn btn-labeled btn-primary" id="anaCertStats" name="anaCertStats" >
                                         <span class="btn-label"><i class="fa fa-file-pdf-o"></i></span>Generate Report
+                                    </button>
+                                    <button type="reset" class="btn btn-labeled btn-warning" id="btn_csr_reset">
+                                        <span class="btn-label"><i class="fa fa-refresh"></i></span>Reset
                                     </button>
                                 </div>
                             </form>

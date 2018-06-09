@@ -2,7 +2,9 @@
     
     $(document).ready(function () {
 
-        pageSetUp();
+        $('#btn_issr_reset').click(function () {
+            $("#form_issr_search").data('bootstrapValidator').resetForm();  
+        });
         
         $('#form_issr_search').bootstrapValidator({
             excluded: [':disabled'],
