@@ -28,6 +28,8 @@ try {
                 $result = Class_db::getInstance()->db_select('vw_opt_delegate_to', array('wfTaskType_id'=>$_POST['status'], 'wfGroup_id'=>$_POST['status_name']));
             } else if ($_POST['tablename'] == 'user_name') {
                 $result = Class_db::getInstance()->db_select('vw_opt_user_name');
+            } else if ($_POST['tablename'] == 'ats_analyst') {
+                $result = Class_db::getInstance()->db_select('vw_opt_ats_analyst');
             } else if ($_POST['tablename'] == 'list_rd') {
                 $result = Class_db::getInstance()->db_select('vw_opt_list_rd', array());
             } else {

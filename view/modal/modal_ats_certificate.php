@@ -88,7 +88,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group no-margin">      
-                                    <label class="col-md-6 control-label"><strong>Sample Condition</strong></label>
+                                    <label class="col-md-6 control-label"><strong>Condition of Sample</strong></label>
                                     <div class="col-md-6 control-label text-align-left">
                                         <span id="lmacr_atsCert_condition"></span> 
                                     </div>
@@ -119,6 +119,7 @@
                                         <th width="40px">No.</th>                    
                                         <th>Sample Code</th>   
                                         <th width="40%">Test Name</th>
+                                        <th width="45px"></th>
                                     </tr>
                                 </thead> 
                                 <tbody></tbody>									

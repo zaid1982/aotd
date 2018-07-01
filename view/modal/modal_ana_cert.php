@@ -93,6 +93,18 @@
                                         <span id="lmacl_atsCert_timeReceived"></span> 
                                     </div>
                                 </div>
+<!--                                <div class="form-group no-margin">
+                                    <label class="col-md-6 control-label"><strong>Quality Manager</strong></label>
+                                    <div class="col-md-6 control-label text-align-left">
+                                        <span id="lmacl_name_quality_manager"></span> 
+                                    </div>
+                                </div>
+                                <div class="form-group no-margin">
+                                    <label class="col-md-6 control-label"><strong>Accredited</strong></label>
+                                    <div class="col-md-6 control-label text-align-left">
+                                        <span id="lmacl_atsCert_accredited"></span> 
+                                    </div>
+                                </div>-->
                             </div>
                         </div>
                     </form>
@@ -132,6 +144,10 @@
                     <input type="hidden" name="macl_atsCert_cycle" id="macl_atsCert_cycle" />
                     <input type="hidden" name="macl_timeprint" id="macl_timeprint" />
                     <input type="hidden" name="macl_atsCert_condition" id="macl_atsCert_condition" />
+                    <input type="hidden" name="macl_atsCert_remark" id="macl_atsCert_remark" />
+                    <input type="hidden" name="lmacl_name_quality_manager" id="lmacl_name_quality_manager" />
+                    <input type="hidden" name="macl_quality_manager_designation" id="macl_quality_manager_designation" />
+                    <input type="hidden" name="macl_atsCert_accredited" id="macl_atsCert_accredited" />
                     <div class="row">
                         <div class="col-md-12">
                             <button type="button" class="btn btn-labeled btn-danger pull-left" data-dismiss="modal">

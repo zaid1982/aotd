@@ -346,17 +346,27 @@ else if (isset($_POST["anaCert"])) {
 
         public function Header() {
             $this->SetFont('times', '', 12);
+            if ($_POST["macl_atsCert_accredited"] == 1) {
+                $logo = ' <img src="../img/logo_standards.PNG" alt="MPOB"  width="50">';
+            }else{
+                $logo = '';
+            }
             $html = '<table border="0" cellpadding="4">
                 <tr>
                     <th width="100" align="center"><img src="../img/mpob.PNG" alt="MPOB"  width="50"></th>
-                    <th width="400" align="center">
+                    <th width="300" align="center">
                         <strong>MALAYSIAN PALM OIL BOARD</strong><br/>
                         <strong>ADVANCED OLEOCHEMICAL TECHNOLOGY DIVISION</strong><br/>
                         ANALYTICAL TESTING SERVICES LABORATORY
                     </th>
+                    <th width="100" align="center">
+                    '.$logo.'
+                    </th>
                 </tr>
             </table><hr>';
             $this->writeHTML($html);
+            $img_file = '../img/watermark.png';
+            $this->Image($img_file, 0, 70, 120, 120, '', '', '', false, 300, 'C', false, false, 0);
         }
 
         public function Footer() {
@@ -463,6 +473,10 @@ else if (isset($_POST["anaCert"])) {
                     <th width="60%">: ' . $_POST["macl_atsCert_condition"] . '</th>
                 </tr>
                 <tr>
+                    <th width="40%">Remarks </th>
+                    <th width="60%">: ' . $_POST["macl_atsCert_remark"] . '</th>
+                </tr>
+                <tr>
                     <th width="100%"><u>Result of Analysis</u></th>
                 </tr>
             </table>
@@ -491,9 +505,9 @@ else if (isset($_POST["anaCert"])) {
             <br/><br/><br/><br/><br/>
             ..........................................
             <br/>
-            Puan Hajar Musa
+            ' . $_POST["macl_name_quality_manager"] . '
             <br/>
-            Senior Research Officer
+            ' . $_POST["macl_quality_manager_designation"] . '
             <br/>
             AOTD MPOB
             <br/>
@@ -561,9 +575,9 @@ else if (isset($_POST["anaCert"])) {
             <br/><br/><br/><br/><br/>
             ..........................................
             <br/>
-            Puan Hajar Musa
+            ' . $_POST["macl_name_quality_manager"] . '
             <br/>
-            Senior Research Officer
+            ' . $_POST["macl_quality_manager_designation"] . '
             <br/>
             AOTD MPOB
             <br/>
@@ -798,17 +812,25 @@ else if (isset($_POST["anaDigital"])) {
 
         public function Header() {
             $this->SetFont('times', '', 12);
+            if ($_POST["macl_atsCert_accredited"] == 1) {
+                $logo = ' <img src="../img/logo_standards.PNG" alt="MPOB"  width="50">';
+            }else{
+                $logo = '';
+            }
             $html = '<table border="0" cellpadding="4">
                 <tr>
                     <th width="100" align="center"><img src="../img/mpob.PNG" alt="MPOB"  width="50"></th>
-                    <th width="400" align="center">
+                    <th width="300" align="center">
                         <strong>MALAYSIAN PALM OIL BOARD</strong><br/>
                         <strong>ADVANCED OLEOCHEMICAL TECHNOLOGY DIVISION</strong><br/>
                         ANALYTICAL TESTING SERVICES LABORATORY
-                    </th>
+                    </th width="100" align="center">
+                    <th>'.$logo.'</th>
                 </tr>
             </table><hr>';
             $this->writeHTML($html);
+            $img_file = '../img/watermark.png';
+            $this->Image($img_file, 0, 70, 120, 120, '', '', '', false, 300, 'C', false, false, 0);
         }
 
         public function Footer() {
@@ -941,9 +963,9 @@ else if (isset($_POST["anaDigital"])) {
             <br/><br/><br/><br/><br/><br/><br/><br/>
             Report issued by,
             <br/>
-            Puan Hajar Musa
+            ' . $_POST["macl_name_quality_manager"] . '
             <br/>
-            Senior Research Officer
+            ' . $_POST["macl_quality_manager_designation"] . '
             <br/>
             AOTD MPOB
             <br/>

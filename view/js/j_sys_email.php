@@ -9,7 +9,7 @@
         
         var datatable_smc = undefined;  
         dataNew = $('#datatable_smc').DataTable({
-            "sDom": "<'dt-toolbar'<'col-sm-12 hidden-xs'l>>" + "t" +
+            "sDom": "<'dt-toolbar'<'col-xs-5 hidden-xs'l><'col-xs-7'p>>" + "t" +
                     "<'dt-toolbar-footer'<'col-xs-5'i><'col-xs-7'p>>",            
             "autoWidth": true,
             "preDrawCallback": function () {

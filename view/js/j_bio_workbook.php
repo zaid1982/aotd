@@ -33,7 +33,7 @@
         
         var datatable_bwb = undefined;  
         dataNew = $('#datatable_bwb').DataTable({
-            "sDom": "<'dt-toolbar'<'col-sm-12 hidden-xs'l>>" + "t" +
+            "sDom": "<'dt-toolbar'<'col-xs-5 hidden-xs'l><'col-xs-7'p>>" + "t" +
                     "<'dt-toolbar-footer'<'col-xs-5'i><'col-xs-7'p>>",
             "aaSorting": [5,'desc'],
             "autoWidth": true,

@@ -27,7 +27,7 @@
         
         var datatable_slg = undefined;  
         dataNew = $('#datatable_slg').DataTable({
-            "sDom": "<'dt-toolbar'<'col-sm-12 hidden-xs'l>>" + "t" +
+            "sDom": "<'dt-toolbar'<'col-xs-5 hidden-xs'l><'col-xs-7'p>>" + "t" +
                     "<'dt-toolbar-footer'<'col-xs-5'i><'col-xs-7'p>>",
             "aaSorting": [1,'desc'],
             "autoWidth": true,

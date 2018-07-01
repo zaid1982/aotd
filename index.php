@@ -543,7 +543,9 @@ if (isset($_POST['mid']) && isset($_POST['m2id']) && isset($_POST['m3id'])) {
 
             $(document).ready(function () {
                 $('#content-notify-info').hide();
-                f_main_alert();
+                setTimeout(function() {
+                    f_main_alert();
+                }, 0);
             });
             
             $(document.body).on('hidden.bs.modal', function () {

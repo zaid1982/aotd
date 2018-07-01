@@ -13,7 +13,7 @@
         
         var datatable_alm = undefined;  var cnt_alm = 1;
         dataNew = $('#datatable_alm').DataTable({
-            "sDom": "<'dt-toolbar'<'col-sm-12 hidden-xs'l>>" + "t" +
+            "sDom": "<'dt-toolbar'<'col-xs-5 hidden-xs'l><'col-xs-7'p>>" + "t" +
                     "<'dt-toolbar-footer'<'col-xs-5'i><'col-xs-7'p>>",
             "aaSorting": [2,'asc'],
             "autoWidth": true,

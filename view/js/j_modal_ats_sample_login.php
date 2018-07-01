@@ -65,10 +65,18 @@
                 masl_atsCondition_id : {
                     validators: {
                         notEmpty : {
-                            message : 'Sample Condition is required'
+                            message : 'Condition of Sample is required'
                         }
                     }
-                },                          
+                },        
+                'masl_ats_analyst_user[]' : {
+                    validators : {
+                        choice : {
+                            min : 1,
+                            message : 'At least 1 Analyst required'
+                        }                        
+                    }
+                },                   
                 masl_atsCert_remark : {
                     validators: {
                         stringLength : {
@@ -106,6 +114,7 @@
                                 f_clg_process (clg_summary_id);
                             } else if (masl_load_type == 2 && masl_otable == 'macr') { 
                                 f_get_general_info('vw_ats_cert', {atsCert_id:$('#masl_atsCert_id').val()}, 'macr');
+                                f_get_general_info('vw_ats_analyst', {}, 'macr', '', {atsCert_id:$('#masl_atsCert_id').val()});
                             }
                         }
                         $('#modal_waiting').modal('hide');
@@ -124,10 +133,12 @@
                 get_option('masl_atsTest_id', '1', 'ats_test', 'atsTest_id', 'atsTest_name', 'atsTest_status', '');
                 get_option('masl_atsType_id', '1', 'ats_type', 'atsType_id', 'atsType_desc', 'atsType_status', ' ', 'ref_id');
                 get_option('masl_atsCondition_id', '1', 'ats_condition', 'atsCondition_id', 'atsCondition_desc', 'atsCondition_status', ' ', 'ref_id');
+                get_option('masl_ats_analyst_user', '1', 'ats_analyst', '', '', '', '', 'ref_id');
                 masl_1st_load = false;
             }
             $('#masl_client_id').val('').trigger('change');
             $('#masl_atsTest_id').val([]).trigger('change');
+            $('#masl_ats_analyst_user').val([]).trigger('change');
             $('#form_masl').trigger('reset'); 
             $('#form_masl').bootstrapValidator('resetForm', true);
             //$('#form_masl').find('input, radio, textarea, select').prop('disabled',false);
@@ -150,6 +161,12 @@
                 $("input[name='masl_atsCert_equipment'][value=" + cert_info.atsCert_equipment + "]").prop('checked', true);
                 $("input[name='masl_atsCert_chemical'][value=" + cert_info.atsCert_chemical + "]").prop('checked', true);
                 $('#masl_client_id').trigger('change');
+                var arr_analyst = [];
+                var arr_ats_analyst = f_get_general_info_multiple('ats_analyst', {atsCert_id:atsCert_id});
+                $.each(arr_ats_analyst,function(u) {
+                    arr_analyst.push(arr_ats_analyst[u].user_id);
+                });
+                $('#masl_ats_analyst_user').val(arr_analyst).trigger('change');
                 if (masl_otable == 'macr') 
                     $('#modal_ats_certificate').addClass('darken');
             }

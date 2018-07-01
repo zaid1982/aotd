@@ -102,7 +102,13 @@
                                 '</div>';
                             return $label;
                         }
-                    }
+                    },
+                    { "data": "atsLab_code", bSortable: false, sClass: 'text-center',
+                        mRender: function (data, type, row) {     
+                            $label = '<button type="button" class="btn btn-primary btn-xs" title="Print Barcode" onclick="getBarCode(\'' + row.atsLab_code + '\',\'' + row.atsLab_barCode + '\')"><span class="glyphicon glyphicon-print"></span></button>';
+                            return $label;
+                        }
+                    } 
                 ]
         });
         
@@ -158,7 +164,7 @@
                         mRender: function (data, type, row) {     
 //                            $label = '<a href="javascript:void(0)" class="text-underline" id="" onclick="f_maov_load_overrid (2, '+row.atsCertTest_id+',\'macr\');" data-toggle="tooltip" data-original-title="Edit Overrid Value" title="Edit Overrid Value">'+data+'</a>';
 //                            return (macr_otable == 'awb' && macr_load_type == '2') ? $label : data;
-                            return '<a href="form-x-editable.html#" class="macr_editable_overrid" id="macr_overrid_'+row.atsCertTest_id+'" data-type="text" data-pk="1" data-value="'+formattedNumber(data,2)+'" data-placement="right" data-placeholder="Required" data-original-title="Enter your firstname"></a>';
+                            return '<a href="form-x-editable.html#" class="macr_editable_overrid" id="macr_overrid_'+row.atsCertTest_id+'" data-type="text" data-pk="1" data-value="'+formattedNumber(data)+'" data-placement="right" data-placeholder="Required" data-original-title="Enter your firstname"></a>';
                         }
                     },
                     {mData: 'atsTest_cost', sClass: 'text-right'},
@@ -223,18 +229,11 @@
                 { "data": "atsLab_code" },
                 { "data": "atsLab_sampleCode" },
                 { "data": "atsLab_code", bSortable: false, sClass: 'text-center',
-                    mRender: function (data, type, row) {                        
-//                        var ids = row.atsLab_id;
-//                        var k = '';
-//                        for (var j=0;j<(12-ids.length);j++){
-//                            k += '0';
-//                        }
-//                        ids = k+ids;
+                    mRender: function (data, type, row) {     
                         $label = '<button type="button" class="btn btn-primary btn-xs" title="Print Barcode" onclick="getBarCode(\'' + row.atsLab_code + '\',\'' + row.atsLab_barCode + '\')"><span class="glyphicon glyphicon-print"></span></button>';
                         return $label;
                     }
-                }
-                
+                }                
             ]
         } );
 
@@ -330,13 +329,14 @@
             },
             "drawCallback": function (oSettings) {
                 datatable_macr_workSummary.respond();
-                if (macr_load_direct != '') {
+                if (typeof macr_load_direct !== 'undefined' && macr_load_direct != '') {
                     var api = this.api();
                     var visibleRows=api.rows().data();
                     if(visibleRows.length >= 1){
                         for(var j=0;j<visibleRows.length;j++){
                             if (visibleRows[j].atsField_id == macr_load_direct) {
                                 $('#datatable_macr_workSummary tbody tr').eq(j).addClass('bg-color-yellow txt-color-white');
+                                alert(macr_load_direct);
                                 f_macr_generate_workbook(macr_load_direct);
                                 macr_load_direct = '';
                                 break;
@@ -494,7 +494,7 @@
                     $('#macr_funct').val('save_ats_sample_info');
                     if (f_submit_forms('form_macr,#form_macr_form', 'p_aotd', 'Data successfully saved.')) {
                         data_macr_sample = f_get_general_info_multiple('ats_sample_info', {atsCert_id:$('#macr_atsCert_id').val()}, {}, '', 'atsLab_code');
-                        f_dataTable_draw(macr_otable_sample, data_macr_sample, 'datatable_macr_sample', 3);
+                        f_dataTable_draw(macr_otable_sample, data_macr_sample, 'datatable_macr_sample', 4);
                     }
                 } else if (macr_load_type == 2 && ((macr_otable == 'avf' && $('#macr_wfTaskType_id').val() == '3') ||(macr_otable == 'avs' && $('#macr_wfTaskType_id').val() == '4'))) {
                     $('#macr_funct').val('save_ats_action');
@@ -524,7 +524,7 @@
                             $('#macr_funct').val('save_ats_sample_info');
                             if (f_submit_forms('form_macr,#form_macr_form', 'p_aotd')) {
                                 data_macr_sample = f_get_general_info_multiple('ats_sample_info', {atsCert_id:$('#macr_atsCert_id').val()}, {}, '', 'atsLab_code');
-                                f_dataTable_draw(macr_otable_sample, data_macr_sample, 'datatable_macr_sample', 3);
+                                f_dataTable_draw(macr_otable_sample, data_macr_sample, 'datatable_macr_sample', 4);
                                 if (f_submit($('#macr_wfTask_id').val(), $('#macr_wfTaskType_id').val(), '10', 'Sample Registration successfully submitted.', '', '', '', '', 'atsCert_id', $('#macr_atsCert_id').val())) {
                                     f_clg_summary();
                                     f_clg_process (clg_summary_id);
@@ -631,7 +631,10 @@
                 var index_var = jQuery.inArray(ats_raw[u].atsVar_id, arr_var_id);
                 var index_lab = jQuery.inArray(ats_raw[u].atsLab_id, arr_lab_id);
                 data_macr_book[index_lab]['a'+index_var] = ats_raw[u].atsRaw_value;
-            });            
+            });                        
+//            '<div class="form-group margin-bottom-0" style="width:100%">' +
+//                '<input type="text" class="form-control" style="width:100%" name="macr_atsRes_a0_'+row.atsLab_code+'" id="macr_atsRes_a0_'+row.atsLab_code+'" value="'+(data!=null?data:'')+'"/>' +
+//                '</div>'
             f_dataTable_draw(macr_otable_book, data_macr_book, 'datatable_macr_book', 12);
             $('.macr_div_workbook2').show();
         }
@@ -647,25 +650,26 @@
             macr_load_type = load_type;
             $('.macr_viewOnly').prop('disabled',true);
             $('.macr_editView, .macr_div_costing, .macr_div_result, .macr_div_sample, .macr_div_workbook, .macr_div_workbook2, .macr_div_action, .macr_attachEdit, .macr_div_upload').hide();
-            f_get_general_info('aotd_lab', {lab_id:'ATS'}, 'macr');
+            fa_get_general_info('aotd_lab', {lab_id:'ATS'}, 'macr');
             var cert_info = f_get_general_info('vw_ats_cert', {atsCert_id:atsCert_id}, 'macr');
+            fa_get_general_info('vw_ats_analyst', {}, 'macr', '', {atsCert_id:atsCert_id});
             $('#macr_atsCert_cycle').val(cert_info.atsCert_cycle);
             if (cert_info.atsCert_status != '2') {
                 $('.macr_div_workbook, .macr_div_costing, .macr_div_result').show();
-                data_macr_costing = f_get_general_info_multiple('dt_ats_cert_test', {atsCert_id:atsCert_id}, {}, '', 'atsTest_name');
-                f_dataTable_draw(macr_otable_costing, data_macr_costing, 'datatable_macr_costing', 7);
-                data_macr_result = f_get_general_info_multiple('ats_sample_info', {atsCert_id:atsCert_id});
-                f_dataTable_draw(macr_otable_result, data_macr_result, 'datatable_macr_result', 3);
+                data_macr_costing = fa_get_general_info_multiple(macr_otable_costing, 'datatable_macr_costing', 7, 'dt_ats_cert_test', {atsCert_id:atsCert_id}, {}, 'atsTest_name');
+                //f_dataTable_draw(macr_otable_costing, data_macr_costing, 'datatable_macr_costing', 7);
+                data_macr_result = fa_get_general_info_multiple(macr_otable_result, 'datatable_macr_result', 3, 'ats_sample_info', {atsCert_id:atsCert_id});
+                //f_dataTable_draw(macr_otable_result, data_macr_result, 'datatable_macr_result', 3);
                 data_macr_workSummary = f_get_general_info_multiple('dt_ats_list_test', {}, {atsCert_id:atsCert_id});
                 f_dataTable_draw(macr_otable_workSummary, data_macr_workSummary, 'datatable_macr_workSummary', 5);
                 macr_otable_workSummary.columns(5).visible(false);
-                if (data_macr_workSummary.length > 0) {
-                    f_macr_generate_workbook(data_macr_workSummary[0].atsField_id);
+                if (data_macr_workSummary.length > 0 && data_macr_workSummary[0].atsField_id != null) {
                     if (data_macr_workSummary.length > 1)
                         $('#datatable_macr_workSummary tbody tr').eq(0).addClass('bg-color-yellow txt-color-white');
+                    f_macr_generate_workbook(data_macr_workSummary[0].atsField_id);
                 }
-                data_macr_upload = f_get_general_info_multiple('dt_document', {document_sampleCode:'%'+cert_info.atsCert_no+'%'}, {}, '', 'document_sampleCode');
-                f_dataTable_draw(macr_otable_upload, data_macr_upload, 'datatable_macr_upload', 6);
+                data_macr_upload = fa_get_general_info_multiple(macr_otable_upload, 'datatable_macr_upload', 6, 'dt_document', {document_sampleCode:'%'+cert_info.atsCert_no+'%'}, {}, 'document_sampleCode');
+                //f_dataTable_draw(macr_otable_upload, data_macr_upload, 'datatable_macr_upload', 6);
                 $('.macr_div_upload').show();
             } 
             var task_turn = 1;
@@ -691,7 +695,7 @@
                 if (macr_otable == 'clg') {
                     $('.macr_div_sample').show();
                     data_macr_sample = f_get_general_info_multiple('ats_sample_info', {atsCert_id:atsCert_id}, {}, '', 'atsLab_code');
-                    f_dataTable_draw(macr_otable_sample, data_macr_sample, 'datatable_macr_sample', 3);
+                    f_dataTable_draw(macr_otable_sample, data_macr_sample, 'datatable_macr_sample', 4);
                 } else if (macr_otable == 'awb') {
                     $('#macr_btn_save').hide();
                     macr_otable_workSummary.columns(5).visible(true);

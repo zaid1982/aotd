@@ -104,6 +104,18 @@ try {
             $atsCert_equipment = (!empty($_POST['masl_atsCert_equipment'])) ? $_POST['masl_atsCert_equipment'] : '0';
             $atsCert_chemical = (!empty($_POST['masl_atsCert_chemical'])) ? $_POST['masl_atsCert_chemical'] : '0';
             $result = Class_db::getInstance()->db_update('ats_sample_log', array('atsCert_equipment'=>$atsCert_equipment, 'atsCert_chemical'=>$atsCert_chemical, 'atsCert_remark'=>$_POST['masl_atsCert_remark'], 'atsType_id'=>$_POST['masl_atsType_id'], 'atsCondition_id'=>$_POST['masl_atsCondition_id']), array('atsCert_id'=>$_POST['masl_atsCert_id']));
+            $arr_analyst = Class_db::getInstance()->db_select_colm ('ats_analyst', array('atsCert_id'=>$_POST['masl_atsCert_id']), 'user_id');
+            $arrPost_analyst = (!empty($_POST['masl_ats_analyst_user'])) ? $_POST['masl_ats_analyst_user'] : array();
+            if ($arr_analyst != $arrPost_analyst) {
+                $arrDiff_analyst1 = array_diff($arrPost_analyst, $arr_analyst);
+                foreach($arrDiff_analyst1 as $value) {
+                    Class_db::getInstance()->db_insert('ats_analyst', array('atsCert_id'=>$_POST['masl_atsCert_id'], 'user_id'=>$value));
+                }
+                $arrDiff_analyst2 = array_diff($arr_analyst, $arrPost_analyst);
+                if (count($arrDiff_analyst2) > 0) {
+                    Class_db::getInstance()->db_delete('ats_analyst', array('atsCert_id'=>$_POST['masl_atsCert_id'], 'user_id'=>'('.  implode(',', $arrDiff_analyst2).')'));
+                }
+            } 
             $atsCert_no = Class_db::getInstance()->db_select_col('ats_sample_log', array('atsCert_id'=>$_POST['masl_atsCert_id']), 'atsCert_no', NULL, 1);
             $fn_task->save_audit (110, $atsCert_no);
         } else if ($_POST['funct'] == 'create_ats_cert') {
@@ -132,6 +144,9 @@ try {
             }
             foreach ($_POST['masl_atsTest_id'] as $atsTest_id) {                
                 Class_db::getInstance()->db_insert('ats_cert_test', array('atsCert_no'=>$cert_no, 'atsCert_id'=>$cert_id, 'atsTest_id'=>$atsTest_id));
+            }
+            foreach ($_POST['masl_ats_analyst_user'] as $ats_analyst_user) {                
+                Class_db::getInstance()->db_insert('ats_analyst', array('atsCert_id'=>$cert_id, 'user_id'=>$ats_analyst_user));
             }
             $result = array('atsCert_id'=>$cert_id, 'wfTask_id'=>$wfTask_id);
             $fn_task->save_audit (109, $cert_no);

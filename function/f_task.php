@@ -238,7 +238,7 @@ class Class_task {
                 $this->save_audit(329, $wfTask_refValue);
             } else if ($wfTaskType_id == '2') {
                 Class_db::getInstance()->db_update('wf_transaction', array('wfTrans_status'=>'48'), array('wfTrans_id'=>$wfTrans_id));
-                Class_db::getInstance()->db_update('ats_sample_log', array('atsCert_status'=>'48', 'atsCert_analyst'=>$user_id), array('atsCert_id'=>$wfTask_refValue));
+                Class_db::getInstance()->db_update('ats_sample_log', array('atsCert_status'=>'48'), array('atsCert_id'=>$wfTask_refValue));
                 $atsCert_no = Class_db::getInstance()->db_select_col('ats_sample_log', array('atsCert_id'=>$wfTask_refValue), 'atsCert_no', NULL, 1);
                 if ($status == '13') {
                     $this->submission_flag = '21';

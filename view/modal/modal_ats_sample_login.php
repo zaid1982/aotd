@@ -80,10 +80,16 @@
                         </div>  
                     </div>
                     <div class="form-group">      
-                        <label class="col-md-4 control-label"><font color="red">*</font> Sample Condition</label>
+                        <label class="col-md-4 control-label"><font color="red">*</font> Condition of Sample</label>
                         <div class="col-md-8 selectContainer">
                             <select class="form-control" name="masl_atsCondition_id" id="masl_atsCondition_id"></select>
                         </div>  
+                    </div>
+                    <div class="form-group">      
+                        <label class="col-md-4 control-label"><font color="red">*</font> Analyst</label>
+                        <div class="col-md-8 selectContainer">
+                            <select multiple class="form-control select2" name="masl_ats_analyst_user[]" id="masl_ats_analyst_user" style="width:100%"></select>
+                        </div> 
                     </div>
                     <div class="form-group">
                         <label class="col-md-4 control-label">Remarks</label>

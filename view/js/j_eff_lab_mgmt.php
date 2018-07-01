@@ -15,7 +15,7 @@
         
         var datatable_flm = undefined;  var cnt_flm = 1;
         dataNew = $('#datatable_flm').DataTable({
-            "sDom": "<'dt-toolbar'<'col-sm-12 hidden-xs'l>>" + "t" +
+            "sDom": "<'dt-toolbar'<'col-xs-5 hidden-xs'l><'col-xs-7'p>>" + "t" +
                     "<'dt-toolbar-footer'<'col-xs-5'i><'col-xs-7'p>>",
             "aaSorting": [2,'asc'],
             "autoWidth": true,

@@ -356,6 +356,7 @@ class Class_sql {
                     aotd_lab.*,
                     CONCAT(t_head_unit.title_desc,' ',p_head_unit.profile_name,' ',p_head_unit.profile_lastname) AS name_head_unit,
                     CONCAT(t_quality_manager.title_desc,' ',p_quality_manager.profile_name,' ',p_quality_manager.profile_lastname) AS name_quality_manager,
+                    p_quality_manager.profile_designation AS quality_manager_designation,
                     CONCAT(t_technical_manager.title_desc,' ',p_technical_manager.profile_name,' ',p_technical_manager.profile_lastname) AS name_technical_manager,
                     CONCAT(t_technical_manager2.title_desc,' ',p_technical_manager2.profile_name,' ',p_technical_manager2.profile_lastname) AS name_technical_manager2,
                     CONCAT(t_research_officer.title_desc,' ',p_research_officer.profile_name,' ',p_research_officer.profile_lastname) AS name_research_officer,
@@ -479,15 +480,12 @@ class Class_sql {
                     IF (ats_sample_log.atsCert_accredited = 1, 'Yes', 'No') AS atsCert_accrediteds,
                     IF (ats_sample_log.atsCert_equipment = 1, 'Available', 'Not Available') AS atsCert_equipments,
                     IF (ats_sample_log.atsCert_chemical = 1, 'Available', 'Not Available') AS atsCert_chemicals,
-                    CONCAT(ref_title.title_desc,' ',`profile`.profile_name,' ',`profile`.profile_lastname) AS profile_fullname,
                     ats_type.atsType_desc AS atsType_desc,
                     ats_condition.atsCondition_desc AS atsCondition_desc,
                     ats_sample_log.*
                 FROM ats_sample_log
                 LEFT JOIN aotd_client_info ON aotd_client_info.client_id = ats_sample_log.client_id
                 LEFT JOIN ref_status ON ref_status.status_id = ats_sample_log.atsCert_status
-                LEFT JOIN `profile` on `profile`.user_id = ats_sample_log.atsCert_analyst AND `profile`.profile_status = 1
-                LEFT JOIN ref_title ON ref_title.title_id = `profile`.title_id
                 LEFT JOIN ats_type ON ats_type.atsType_id = ats_sample_log.atsType_id
                 LEFT JOIN ats_condition ON ats_condition.atsCondition_id = ats_sample_log.atsCondition_id";
             } else if ($title == 'dt_ats_cert_test') {
@@ -1147,6 +1145,24 @@ class Class_sql {
                 FROM [lab_code]_sample_log 
                 LEFT JOIN aotd_client_info ON aotd_client_info.client_id = [lab_code]_sample_log.client_id
                 WHERE [ref_name] = '[ref_value]'";
+            } else if ($title == 'vw_ats_analyst') {    
+                $sql = "SELECT 
+                    atsCert_id,
+                    GROUP_CONCAT(CONCAT(ref_title.title_desc,' ',`profile`.profile_name,' ',`profile`.profile_lastname) SEPARATOR ', ') AS profile_fullname
+                FROM ats_analyst
+                LEFT JOIN `profile` ON `profile`.user_id = ats_analyst.user_id AND `profile`.profile_status = 1
+                LEFT JOIN ref_title ON ref_title.title_id = `profile`.title_id
+                WHERE atsCert_id = [atsCert_id]
+                GROUP BY atsCert_id";
+            } else if ($title == 'vw_opt_ats_analyst') {
+                $sql = "SELECT 
+                    `profile`.user_id AS ref_id,
+                    CONCAT(ref_title.title_desc,' ',`profile`.profile_name,' ',`profile`.profile_lastname) AS ref_desc
+                FROM `profile` 
+                LEFT JOIN ref_title ON ref_title.title_id = `profile`.title_id
+                INNER JOIN user_type ON user_type.user_id = `profile`.user_id AND user_type.uType_id = 27
+                WHERE profile_status = 1 
+                ORDER BY `profile`.profile_name";
             } else
                 throw new Exception($this->get_exception('0098', __FUNCTION__, __LINE__, 'Sql not exist : ' . $title));
             return $sql;

@@ -10,6 +10,50 @@ var dataSeries;
 var color_set = ['RoyalBlue', 'HotPink', 'Salmon', 'DarkKhaki', 'LawnGreen', 'RebeccaPurple', 'MediumOrchid', 'DarkOliveGreen', 'Indigo', 'MediumTurquoise'];
 var bg_color_set = ['pink', 'greenLight', 'blueLight', 'blueDark', 'red', 'teal', 'orange', 'green', 'yellow', 'blue', 'magenta', 'redLight', 'greenLight', 'pinkDark'];
 
+jQuery.fn.dataTableExt.oSort['uk_date-asc'] = function(a, b) {
+    var ukDatea = a.split('/');
+    var ukDateb = b.split('/');
+
+    var x = a==''?0:(ukDatea[2] + ukDatea[1] + ukDatea[0]) * 1;
+    var y = b==''?0:(ukDateb[2] + ukDateb[1] + ukDateb[0]) * 1;
+
+    return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+};
+
+jQuery.fn.dataTableExt.oSort['uk_date-desc'] = function(a, b) {
+    var ukDatea = a.split('/');
+    var ukDateb = b.split('/');
+
+    var x = a==''?0:(ukDatea[2] + ukDatea[1] + ukDatea[0]) * 1;
+    var y = b==''?0:(ukDateb[2] + ukDateb[1] + ukDateb[0]) * 1;
+
+    return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+};
+
+jQuery.fn.dataTableExt.oSort['uk_time-asc'] = function(a, b) {
+    var ukDatea = a.substr(0,10).split('/');
+    var ukDateb = b.substr(0,10).split('/');
+    var ukTimea = a.substr(11).split(':');
+    var ukTimeb = b.substr(11).split(':');
+    
+    var x = a==''?0:(ukDatea[2] + ukDatea[1] + ukDatea[0] + ukTimea[0] + ukTimea[1] + ukTimea[2]) * 1;
+    var y = b==''?0:(ukDateb[2] + ukDateb[1] + ukDateb[0] + ukTimeb[0] + ukTimeb[1] + ukTimeb[2]) * 1;
+    
+    return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+};
+
+jQuery.fn.dataTableExt.oSort['uk_time-desc'] = function(a, b) {
+    var ukDatea = a.substr(0,10).split('/');
+    var ukDateb = b.substr(0,10).split('/');
+    var ukTimea = a.substr(11).split(':');
+    var ukTimeb = b.substr(11).split(':');
+    
+    var x = a==''?0:(ukDatea[2] + ukDatea[1] + ukDatea[0] + ukTimea[0] + ukTimea[1] + ukTimea[2]) * 1;
+    var y = b==''?0:(ukDateb[2] + ukDateb[1] + ukDateb[0] + ukTimeb[0] + ukTimeb[1] + ukTimeb[2]) * 1;
+
+    return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+};
+
 $(document).ready(function () {
     $('#btn_clear').click(function() {
         $('#form_main').trigger('reset'); 
@@ -965,7 +1009,81 @@ function f_get_general_info(tablename, columns, form_tag, disabled, param, statu
     }); 
     return returnVal;
 }
+
+function fa_get_general_info(tablename, columns, form_tag, disabled, param, status_name) {
+    var returnVal = '';
+    param = typeof param === 'undefined' ? {} : param;
+    status_name = typeof status_name === 'undefined' ? '' : status_name;
+    $.ajax({
+        url: "process/p_task.php",
+        type: "POST",
+        dataType : "json",
+        async : true,
+        data: { 
+            "funct" : "get_general_info",
+            "tablename" : tablename,
+            "columns" : columns,
+            "param" : param,
+            "status_name" : status_name
+        },
+        success: function(resp){
+            if (resp.success == true){ 
+                if (typeof form_tag !== 'undefined') {
+                    $.each(resp.result, function(name, vals){
+                        $('#l'+form_tag+'_'+name).html(replaceNull(vals, '-'));
+                        $('#'+form_tag+'_'+name).val(vals);
+                        //$('#'+form_tag+'_'+name).change();
+                        if (typeof disabled !== 'undefined' && disabled == 1) 
+                            $('#'+form_tag+'_'+name).prop('disabled',true);
+//                        } else
+//                            $('#'+form_tag+'_'+name).attr('disabled',false);
+                    });
+                } 
+                returnVal = resp.result;
+            } else {
+                f_notify(2, 'Error', resp.errors);
+            }
+        },
+        error: function() {
+            f_notify(2, 'Error', errMsg_default);
+        }
+    }); 
+    return returnVal;
+}
     
+function fa_get_general_info_multiple(data_table, dt_id, cols, tablename, columns, param, order) {
+    columns = typeof columns === 'undefined' ? {} : columns;
+    param = typeof param === 'undefined' ? {} : param;
+    order = typeof order === 'undefined' ? '' : order;
+    var returnVal = '';    
+    $.ajax({
+        url: "process/p_task.php",
+        type: "POST",
+        dataType : "json",
+        async : true,
+        data: { 
+            "funct" : "get_general_info_multiple",
+            "tablename" : tablename,
+            "columns" : columns,
+            "param" : param,
+            "status_name" : '',
+            "order" : order
+        },
+        success: function(resp){
+            if (resp.success == true){ 
+                f_dataTable_draw(data_table, resp.result, dt_id, cols);
+                returnVal = resp.result;
+            } else {
+                f_notify(2, 'Error', resp.errors);
+            }
+        },
+        error: function() {
+            f_notify(2, 'Error', errMsg_default);
+        }
+    }); 
+    return returnVal;
+}
+
 function f_get_general_info_multiple(tablename, columns, param, status_name, order) {
     columns = typeof columns === 'undefined' ? {} : columns;
     param = typeof param === 'undefined' ? {} : param;
