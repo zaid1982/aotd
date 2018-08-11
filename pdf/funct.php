@@ -389,15 +389,15 @@ LEFT JOIN ats_test ON ats_test.atsTest_id = ats_cert_test.atsTest_id ".$whereSea
                 </tr>';
     }  
     $jumlahs = floatval($jumlah);
-    $gst = (floatval($jumlah))*0.06;
+    $gst = (floatval($jumlah))*0.00;
     $aftergst = $jumlahs + $gst;
     $output .= '<tr>
                     <th width="85%" align="right">JUMLAH</th>
                     <th width="15%" align="right">RM '.floatval($jumlah).'</th>
                 </tr>
                 <tr>
-                    <th width="85%" align="right">GST (6%)</th>
-                    <th width="15%" align="right">RM '.(floatval($jumlah))*0.06.'</th>
+                    <th width="85%" align="right">GST (0%)</th>
+                    <th width="15%" align="right">RM '.(floatval($jumlah))*0.00.'</th>
                 </tr>
                 <tr>
                     <th width="85%" align="right">JUMLAH TERMASUK GST</th>

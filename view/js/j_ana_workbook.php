@@ -85,7 +85,7 @@
                 dataNew.column($(this).parent().index() + ':visible').search('^'+this.value+'$', true, false, true).draw();
         }); 
         
-        $('#modal_waiting').on('shown.bs.modal', function(e){
+        $('#modal_waiting').on('shown.bs.modal', function(e){            
             if (f_check_task_user (2)) {
                 f_awb_summary();
                 f_awb_process(awb_summary_id, 'Incoming Task');
@@ -100,6 +100,17 @@
                 $('#modal_waiting').modal('hide');
                 $(this).unbind(e);
             }).modal('show');
+        });
+        
+        $('#awb_barcode_no').keydown(function(e) {            
+            if (e.keyCode == 13) {
+                e.preventDefault();
+                $('#modal_waiting').on('shown.bs.modal', function(e){                
+                    f_awb_process(awb_summary_id, '', $('#awb_barcode_no').val());
+                    $('#modal_waiting').modal('hide');
+                    $(this).unbind(e);
+                }).modal('show');
+            }
         });
         
     });

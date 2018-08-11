@@ -631,7 +631,9 @@ class Class_task {
                 $ipaddress = 'UNKNOWN';
             if (!in_array($ipaddress, array('', 'UNKNOWN', '::1'), true)) {
                 $details = json_decode(file_get_contents("http://ipinfo.io/$ipaddress/json"));
-                $place = $ip.$details->city;
+                if (isset($details->city)) {
+                    $place = $details->city;
+                }
             }
             return Class_db::getInstance()->db_insert('audit', array('user_id'=>(isset($_SESSION['user_id'])?$_SESSION['user_id']:''), 'auditAction_id'=>$auditAction_id, 'audit_ip'=>$ipaddress, 'audit_place'=>$place, 'audit_transNo'=>$audit_transNo));
         }

@@ -117,6 +117,23 @@
             }).modal('show');
         });
         
+        $('#clg_barcode_no').keydown(function(e) {            
+            if (e.keyCode == 13) {
+                e.preventDefault();
+                $('#modal_waiting').on('shown.bs.modal', function(e){                
+                    var ats_sample_info = f_get_general_info('ats_sample_info', {atsLab_barCode:$('#clg_barcode_no').val()});
+                    datas = f_get_general_info_multiple('dt_ats_cert_login', {atsCert_id:ats_sample_info.atsCert_id});
+                    f_dataTable_draw(dataNew, datas);
+                    $('.clg_lbl_summary').removeClass('text-bold');
+                    $('#clg_table_header').html('[Scanned = ' + ats_sample_info.atsLab_code + ']');
+                    clg_summary_id = '';
+                    $('#modal_waiting').modal('hide');
+                    $(this).unbind(e);
+                }).modal('show');
+            }
+        });
+        
+        
     });
     
     function f_clg_process(summary_id, title) {

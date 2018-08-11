@@ -116,6 +116,22 @@
             }).modal('show');
         });
         
+        $('#asm_barcode_no').keydown(function(e) {            
+            if (e.keyCode == 13) {
+                e.preventDefault();
+                $('#modal_waiting').on('shown.bs.modal', function(e){                
+                    var ats_sample_info = f_get_general_info('ats_sample_info', {atsLab_barCode:$('#asm_barcode_no').val()});
+                    datas = f_get_general_info_multiple('dt_ats_cert', {atsCert_id:ats_sample_info.atsCert_id});
+                    f_dataTable_draw(dataNew, datas);
+                    $('.asm_lbl_summary').removeClass('text-bold');
+                    $('#asm_table_header').html('[Scanned = ' + ats_sample_info.atsLab_code + ']');
+                    asm_summary_id = '';
+                    $('#modal_waiting').modal('hide');
+                    $(this).unbind(e);
+                }).modal('show');
+            }
+        });
+        
     });
     
     function f_asm_process(summary_id, title) {
