@@ -76,8 +76,14 @@
                     <div class="form-group">      
                         <label class="col-md-4 control-label"><font color="red">*</font> Type of Sample</label>
                         <div class="col-md-8 selectContainer">
-                            <select class="form-control" name="masl_atsType_id" id="masl_atsType_id"></select>
+                            <select class="form-control" name="masl_atsType_id" id="masl_atsType_id" onchange="f_masl_other_sample(this.value);"></select>
                         </div>  
+                    </div>
+                    <div class="form-group" id="masl_div_other_sample">      
+                        <label class="col-md-4 control-label"><font color="red">*</font> Other Type of Sample</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" name="masl_atsType_other" id="masl_atsType_other" />
+                        </div>   
                     </div>
                     <div class="form-group">      
                         <label class="col-md-4 control-label"><font color="red">*</font> Condition of Sample</label>

@@ -89,6 +89,12 @@
                                         <span id="lalm_name_supervisor"></span>
                                     </div>
                                 </div>
+                                <div class="form-group no-margin">
+                                    <label class="col-md-3 control-label font-sm"><strong>Accountant</strong></label>
+                                    <div class="col-md-9 control-label font-sm text-align-left">
+                                        <span id="lalm_name_accountant"></span>
+                                    </div>
+                                </div>
                                 <input type="hidden" name="alm_lab_id" id="alm_lab_id" />
                             </form>
                         </div>

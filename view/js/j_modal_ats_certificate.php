@@ -154,7 +154,11 @@
                     .reduce( function (a, b) {
                         return parseFloat(a) + parseFloat(b);
                     }, 0);
+                var sst = total*0.1;
+                var overall = total+sst;
                 $(api.column(6).footer()).html(formattedNumber(total, 2));
+                $('#lmacr_sst').html(formattedNumber(sst, 2));
+                $('#lmacr_overall').html(formattedNumber(overall, 2));
             },
             "aoColumns":
                 [
@@ -652,66 +656,66 @@
             $('.macr_editView, .macr_div_costing, .macr_div_result, .macr_div_sample, .macr_div_workbook, .macr_div_workbook2, .macr_div_action, .macr_attachEdit, .macr_div_upload').hide();
             fa_get_general_info('aotd_lab', {lab_id:'ATS'}, 'macr');
             var cert_info = f_get_general_info('vw_ats_cert', {atsCert_id:atsCert_id}, 'macr');
-            fa_get_general_info('vw_ats_analyst', {}, 'macr', '', {atsCert_id:atsCert_id});
-            $('#macr_atsCert_cycle').val(cert_info.atsCert_cycle);
-            if (cert_info.atsCert_status != '2') {
-                $('.macr_div_workbook, .macr_div_costing, .macr_div_result').show();
-                data_macr_costing = fa_get_general_info_multiple(macr_otable_costing, 'datatable_macr_costing', 7, 'dt_ats_cert_test', {atsCert_id:atsCert_id}, {}, 'atsTest_name');
-                //f_dataTable_draw(macr_otable_costing, data_macr_costing, 'datatable_macr_costing', 7);
-                data_macr_result = fa_get_general_info_multiple(macr_otable_result, 'datatable_macr_result', 3, 'ats_sample_info', {atsCert_id:atsCert_id});
-                //f_dataTable_draw(macr_otable_result, data_macr_result, 'datatable_macr_result', 3);
-                data_macr_workSummary = f_get_general_info_multiple('dt_ats_list_test', {}, {atsCert_id:atsCert_id});
-                f_dataTable_draw(macr_otable_workSummary, data_macr_workSummary, 'datatable_macr_workSummary', 5);
-                macr_otable_workSummary.columns(5).visible(false);
-                if (data_macr_workSummary.length > 0 && data_macr_workSummary[0].atsField_id != null) {
-                    if (data_macr_workSummary.length > 1)
-                        $('#datatable_macr_workSummary tbody tr').eq(0).addClass('bg-color-yellow txt-color-white');
-                    f_macr_generate_workbook(data_macr_workSummary[0].atsField_id);
+            if (cert_info) {
+                data_macr_history = fa_get_general_info_multiple('dt_task_history', {wfTrans_id:(cert_info.wfTrans_id!=null?cert_info.wfTrans_id:'0')}, {}, 'wfTask_id', macr_otable_history, 'datatable_macr_history', 6);
+                fa_get_general_info('vw_ats_analyst', {}, 'macr', '', {atsCert_id:atsCert_id});
+                $('#macr_atsCert_cycle').val(cert_info.atsCert_cycle);
+                if (cert_info.atsCert_status != '2') {
+                    $('.macr_div_workbook, .macr_div_costing, .macr_div_result').show();
+                    data_macr_costing = fa_get_general_info_multiple('dt_ats_cert_test', {atsCert_id:atsCert_id}, {}, 'atsTest_name', macr_otable_costing, 'datatable_macr_costing', 7);
+                    data_macr_result = fa_get_general_info_multiple('ats_sample_info', {atsCert_id:atsCert_id}, {}, '', macr_otable_result, 'datatable_macr_result', 3);
+                    data_macr_workSummary = f_get_general_info_multiple('dt_ats_list_test', {}, {atsCert_id:atsCert_id});
+                    f_dataTable_draw(macr_otable_workSummary, data_macr_workSummary, 'datatable_macr_workSummary', 5);
+                    macr_otable_workSummary.columns(5).visible(false);
+                    if (data_macr_workSummary.length > 0 && data_macr_workSummary[0].atsField_id != null) {
+                        if (data_macr_workSummary.length > 1)
+                            $('#datatable_macr_workSummary tbody tr').eq(0).addClass('bg-color-yellow txt-color-white');
+                        f_macr_generate_workbook(data_macr_workSummary[0].atsField_id);
+                    }
+                    data_macr_upload = fa_get_general_info_multiple('dt_document', {document_sampleCode:'%'+cert_info.atsCert_no+'%'}, {}, 'document_sampleCode', macr_otable_upload, 'datatable_macr_upload', 6);
+                    $('.macr_div_upload').show();
+                } 
+                var task_turn = 1;
+                var wf_task;
+                if (cert_info.wfTrans_id != null) {
+                    wf_task = f_get_general_info('wf_task', {wfTrans_id:cert_info.wfTrans_id, wfTask_partition:'1'}, 'macr');
+                    var wf_task_type = f_get_general_info('wf_task_type', {wfTaskType_id:wf_task.wfTaskType_id});
+                    task_turn = wf_task_type.wfTaskType_turn;
+                } else {
+                    if (cert_info.atsCert_status == '4')
+                        task_turn = '2';
+                    else if (cert_info.atsCert_status == '48')
+                        task_turn = '3';
+                    else if (cert_info.atsCert_status == '49')
+                        task_turn = '4';
+                    else if (cert_info.atsCert_status == '42')
+                        task_turn = '5';
                 }
-                data_macr_upload = fa_get_general_info_multiple(macr_otable_upload, 'datatable_macr_upload', 6, 'dt_document', {document_sampleCode:'%'+cert_info.atsCert_no+'%'}, {}, 'document_sampleCode');
-                //f_dataTable_draw(macr_otable_upload, data_macr_upload, 'datatable_macr_upload', 6);
-                $('.macr_div_upload').show();
-            } 
-            var task_turn = 1;
-            var wf_task;
-            if (cert_info.wfTrans_id != null) {
-                wf_task = f_get_general_info('wf_task', {wfTrans_id:cert_info.wfTrans_id, wfTask_partition:'1'}, 'macr');
-                var wf_task_type = f_get_general_info('wf_task_type', {wfTaskType_id:wf_task.wfTaskType_id});
-                task_turn = wf_task_type.wfTaskType_turn;
+                var arr_steps = f_get_general_info_multiple('wf_task_type', {wfFlow_id:'1'});
+                f_steps (arr_steps, task_turn, 'macr_steps');  
+                if (wfTask_id != null && macr_load_type == 2) {
+                    $('.macr_editView').show();
+                    if (macr_otable == 'clg') {
+                        $('.macr_div_sample').show();
+                        data_macr_sample = f_get_general_info_multiple('ats_sample_info', {atsCert_id:atsCert_id}, {}, '', 'atsLab_code');
+                        f_dataTable_draw(macr_otable_sample, data_macr_sample, 'datatable_macr_sample', 4);
+                    } else if (macr_otable == 'awb') {
+                        $('#macr_btn_save').hide();
+                        macr_otable_workSummary.columns(5).visible(true);
+                        $('.macr_attachEdit').show();
+                    } else if (macr_otable == 'avf' || macr_otable == 'avs') {
+                        $('.macr_div_action').show();                    
+                        if (wf_task.wfTask_statusSave != null)
+                            $("input[name='macr_action'][value="+wf_task.wfTask_statusSave+"]").prop('checked', true);
+                        $('#macr_snote_wfTask_remark').summernote('code', wf_task.wfTask_remark);
+                    }
+                }            
+                $('#lmacr_atsCert_condition').html(cert_info.atsCondition_desc!=null?cert_info.atsCondition_desc:cert_info.atsCert_condition);
+                $('#macr_wfTask_id').val(wfTask_id);
+                $('#modal_ats_certificate').modal('show');
             } else {
-                if (cert_info.atsCert_status == '4')
-                    task_turn = '2';
-                else if (cert_info.atsCert_status == '48')
-                    task_turn = '3';
-                else if (cert_info.atsCert_status == '49')
-                    task_turn = '4';
-                else if (cert_info.atsCert_status == '42')
-                    task_turn = '5';
+                f_notify(2, 'Error', errMsg_default);
             }
-            var arr_steps = f_get_general_info_multiple('wf_task_type', {wfFlow_id:'1'});
-            f_steps (arr_steps, task_turn, 'macr_steps');  
-            if (wfTask_id != null && macr_load_type == 2) {
-                $('.macr_editView').show();
-                if (macr_otable == 'clg') {
-                    $('.macr_div_sample').show();
-                    data_macr_sample = f_get_general_info_multiple('ats_sample_info', {atsCert_id:atsCert_id}, {}, '', 'atsLab_code');
-                    f_dataTable_draw(macr_otable_sample, data_macr_sample, 'datatable_macr_sample', 4);
-                } else if (macr_otable == 'awb') {
-                    $('#macr_btn_save').hide();
-                    macr_otable_workSummary.columns(5).visible(true);
-                    $('.macr_attachEdit').show();
-                } else if (macr_otable == 'avf' || macr_otable == 'avs') {
-                    $('.macr_div_action').show();                    
-                    if (wf_task.wfTask_statusSave != null)
-                        $("input[name='macr_action'][value="+wf_task.wfTask_statusSave+"]").prop('checked', true);
-                    $('#macr_snote_wfTask_remark').summernote('code', wf_task.wfTask_remark);
-                }
-            }            
-            data_macr_history = f_get_general_info_multiple('dt_task_history', {wfTrans_id:(cert_info.wfTrans_id!=null?cert_info.wfTrans_id:'0')}, '', '', 'wfTask_id');
-            f_dataTable_draw(macr_otable_history, data_macr_history, 'datatable_macr_history', 6);
-            $('#lmacr_atsCert_condition').html(cert_info.atsCondition_desc!=null?cert_info.atsCondition_desc:cert_info.atsCert_condition);
-            $('#macr_wfTask_id').val(wfTask_id);
-            $('#modal_ats_certificate').modal('show');
             $('#modal_waiting').modal('hide');
             $(this).unbind(e);
         }).modal('show');

@@ -71,7 +71,8 @@
                 get_option('mle_lab_technical_manager', '', 'user_name');    
                 get_option('mle_lab_technical_manager2', '', 'user_name');    
                 get_option('mle_lab_research_officer', '', 'user_name');    
-                get_option('mle_lab_supervisor', '', 'user_name');             
+                get_option('mle_lab_supervisor', '', 'user_name');          
+                get_option('mle_lab_accountant', '', 'user_name');             
                 mle_1st_load = false;
             }
             $('#form_mle').trigger('reset');
@@ -88,6 +89,7 @@
             $('#mle_lab_technical_manager2').select2().val(lab_info.lab_technical_manager2).trigger('change');
             $('#mle_lab_research_officer').select2().val(lab_info.lab_research_officer).trigger('change');
             $('#mle_lab_supervisor').select2().val(lab_info.lab_supervisor).trigger('change');
+            $('#mle_lab_accountant').select2().val(lab_info.lab_accountant).trigger('change');
             $('#modal_lab_edit').modal('show');
             $('#modal_waiting').modal('hide');
             $(this).unbind(e);

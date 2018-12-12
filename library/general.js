@@ -1051,10 +1051,11 @@ function fa_get_general_info(tablename, columns, form_tag, disabled, param, stat
     return returnVal;
 }
     
-function fa_get_general_info_multiple(data_table, dt_id, cols, tablename, columns, param, order) {
+function fa_get_general_info_multiple(tablename, columns, param, order, data_table, dt_id, cols) {
     columns = typeof columns === 'undefined' ? {} : columns;
     param = typeof param === 'undefined' ? {} : param;
     order = typeof order === 'undefined' ? '' : order;
+    dt_id = typeof dt_id === 'undefined' ? '' : dt_id;
     var returnVal = '';    
     $.ajax({
         url: "process/p_task.php",
@@ -1071,7 +1072,9 @@ function fa_get_general_info_multiple(data_table, dt_id, cols, tablename, column
         },
         success: function(resp){
             if (resp.success == true){ 
-                f_dataTable_draw(data_table, resp.result, dt_id, cols);
+                if (dt_id != '') {
+                    f_dataTable_draw(data_table, resp.result, dt_id, cols);
+                }
                 returnVal = resp.result;
             } else {
                 f_notify(2, 'Error', resp.errors);

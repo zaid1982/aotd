@@ -64,6 +64,12 @@
                             <select class="form-control select2" name="mle_lab_supervisor" id="mle_lab_supervisor" style="width:100%"></select>
                         </div>
                     </div>  
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Accountant</label>
+                        <div class="col-md-8 selectContainer">   
+                            <select class="form-control select2" name="mle_lab_accountant" id="mle_lab_accountant" style="width:100%"></select>
+                        </div>
+                    </div>  
                 </div>
                 <input type="hidden" name="mle_lab_id" id="mle_lab_id" />
                 <input type="hidden" name="funct" id="mle_funct" />

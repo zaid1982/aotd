@@ -144,8 +144,16 @@
                             </thead>                            
                             <tfoot>
                                 <tr>
-                                    <th colspan="6" style="text-align:right">Total:</th>
+                                    <th colspan="6" style="text-align:right">Total Cost:</th>
                                     <th></th>
+                                </tr>
+                                <tr>
+                                    <th colspan="6" style="text-align:right">SST (10%):</th>
+                                    <th class="text-align-right"><span id="lmacr_sst"></span></th>
+                                </tr>
+                                <tr>
+                                    <th colspan="6" style="text-align:right">Total Overall:</th>
+                                    <th class="text-align-right"><span id="lmacr_overall"></span></th>
                                 </tr>
                             </tfoot>
                             <tbody></tbody>									

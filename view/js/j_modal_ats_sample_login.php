@@ -61,6 +61,17 @@
                             message : 'Type of Sample is required'
                         }
                     }
+                },                             
+                masl_atsType_other : {
+                    validators: {
+                        notEmpty : {
+                            message : 'Other Type of Sample is required'
+                        },
+                        stringLength : {
+                            max : 100,
+                            message : 'Other Type of Sample must not more than 100 characters'
+                        }
+                    }
                 },                          
                 masl_atsCondition_id : {
                     validators: {
@@ -126,6 +137,20 @@
         
     });
     
+    function f_masl_other_sample(atsType_id, atsType_other) {
+        $('#form_masl').data('bootstrapValidator').resetField('masl_atsType_other');
+        if (atsType_id == '7') {
+            $('#masl_div_other_sample').show();
+            $('#form_masl').bootstrapValidator('enableFieldValidators', 'masl_atsType_other', true); 
+            if (atsType_other != '') {
+                $('#masl_atsType_other').val(atsType_other);
+            }
+        } else {
+            $('#masl_div_other_sample').hide();
+            $('#form_masl').bootstrapValidator('enableFieldValidators', 'masl_atsType_other', false);
+        }
+    }
+    
     function f_masl_load_sample_login(load_type, atsCert_id, otable) {
         $('#modal_waiting').on('shown.bs.modal', function(e){  
             if (masl_1st_load) {
@@ -143,12 +168,14 @@
             $('#form_masl').bootstrapValidator('resetForm', true);
             //$('#form_masl').find('input, radio, textarea, select').prop('disabled',false);
             $('#form_masl').bootstrapValidator('enableFieldValidators', 'masl_atsTest_id[]', false); 
+            $('#masl_client_id, #masl_atsCert_totalSample').prop('disabled',false);
+            $("input[name='masl_atsCert_accredited']").prop('disabled',false);
             masl_otable = otable;
             masl_load_type = load_type;
             $('.masl_viewOnly').prop('disabled',true);
             $('.masl_hideFill, .masl_hideEdit').show();
             if (masl_load_type == 1) {                
-                $('.masl_hideFill').hide();
+                $('.masl_hideFill, #masl_div_other_sample').hide();
                 $('#masl_funct').val('create_ats_cert');
                 $('#form_masl').bootstrapValidator('enableFieldValidators', 'masl_atsTest_id[]', true); 
             } else if (masl_load_type == 2) {
@@ -167,6 +194,7 @@
                     arr_analyst.push(arr_ats_analyst[u].user_id);
                 });
                 $('#masl_ats_analyst_user').val(arr_analyst).trigger('change');
+                f_masl_other_sample(cert_info.atsType_id, cert_info.atsType_other);
                 if (masl_otable == 'macr') 
                     $('#modal_ats_certificate').addClass('darken');
             }

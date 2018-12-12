@@ -360,7 +360,8 @@ class Class_sql {
                     CONCAT(t_technical_manager.title_desc,' ',p_technical_manager.profile_name,' ',p_technical_manager.profile_lastname) AS name_technical_manager,
                     CONCAT(t_technical_manager2.title_desc,' ',p_technical_manager2.profile_name,' ',p_technical_manager2.profile_lastname) AS name_technical_manager2,
                     CONCAT(t_research_officer.title_desc,' ',p_research_officer.profile_name,' ',p_research_officer.profile_lastname) AS name_research_officer,
-                    CONCAT(t_supervisor.title_desc,' ',p_supervisor.profile_name,' ',p_supervisor.profile_lastname) AS name_supervisor
+                    CONCAT(t_supervisor.title_desc,' ',p_supervisor.profile_name,' ',p_supervisor.profile_lastname) AS name_supervisor,
+                    CONCAT(t_accountant.title_desc,' ',p_accountant.profile_name,' ',p_accountant.profile_lastname) AS name_accountant
                 FROM aotd_lab 
                 LEFT JOIN `profile` p_head_unit ON p_head_unit.user_id = aotd_lab.lab_head_unit AND p_head_unit.profile_status = 1
                 LEFT JOIN ref_title t_head_unit ON t_head_unit.title_id = p_head_unit.title_id
@@ -373,7 +374,9 @@ class Class_sql {
                 LEFT JOIN `profile` p_research_officer ON p_research_officer.user_id = aotd_lab.lab_research_officer AND p_research_officer.profile_status = 1
                 LEFT JOIN ref_title t_research_officer ON t_research_officer.title_id = p_research_officer.title_id
                 LEFT JOIN `profile` p_supervisor ON p_supervisor.user_id = aotd_lab.lab_supervisor AND p_supervisor.profile_status = 1
-                LEFT JOIN ref_title t_supervisor ON t_supervisor.title_id = p_supervisor.title_id";
+                LEFT JOIN ref_title t_supervisor ON t_supervisor.title_id = p_supervisor.title_id
+                LEFT JOIN `profile` p_accountant ON p_accountant.user_id = aotd_lab.lab_accountant AND p_accountant.profile_status = 1
+                LEFT JOIN ref_title t_accountant ON t_accountant.title_id = p_accountant.title_id";
             } else if ($title == 'dt_ats_test') {
                 $sql = "SELECT 
                     ats_test.*,
@@ -480,7 +483,7 @@ class Class_sql {
                     IF (ats_sample_log.atsCert_accredited = 1, 'Yes', 'No') AS atsCert_accrediteds,
                     IF (ats_sample_log.atsCert_equipment = 1, 'Available', 'Not Available') AS atsCert_equipments,
                     IF (ats_sample_log.atsCert_chemical = 1, 'Available', 'Not Available') AS atsCert_chemicals,
-                    ats_type.atsType_desc AS atsType_desc,
+                    IF (ats_type.atsType_id = 7, ats_sample_log.atsType_other, ats_type.atsType_desc) AS atsType_desc,
                     ats_condition.atsCondition_desc AS atsCondition_desc,
                     ats_sample_log.*
                 FROM ats_sample_log
