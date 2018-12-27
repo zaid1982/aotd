@@ -612,35 +612,37 @@
     
     function f_macr_generate_workbook(field_id) {
         if (f_submit_normal('get_formula_id', {atsField_id:field_id}, 'p_aotd')) {
-            $('#macr_atsFormula_id').val(result_submit.atsFormula_id);
-            for (var i=1; i<=10; i++) {
-                macr_otable_book.columns(i).visible(false);
+            if (result_submit != '-') {
+                $('#macr_atsFormula_id').val(result_submit.atsFormula_id);
+                for (var i=1; i<=10; i++) {
+                    macr_otable_book.columns(i).visible(false);
+                }
+                var arr_var_id = [];
+                var arr_lab_id = [];
+                ats_formula_vars = f_get_general_info_multiple('ats_formula_vars', {atsformula_id:$('#macr_atsFormula_id').val()});
+                var th_width = 10 - ats_formula_vars.length + 7;
+                $.each(ats_formula_vars,function(u) {
+                    macr_otable_book.columns(u+1).visible(true);
+                    $(macr_otable_book.columns(u+1).header()).html(ats_formula_vars[u].atsVar_name);
+                    $('#datatable_macr_book thead th:eq(' + (u+1) + ')').width(th_width+'%');
+                    arr_var_id.push(ats_formula_vars[u].atsVar_id);
+                });
+                data_macr_book = f_get_general_info_multiple('dt_ats_res_wb', {}, {atsCert_id:$('#macr_atsCert_id').val(), atsRes_cycle:$('#macr_atsCert_cycle').val(), atsField_id:field_id});
+                $.each(data_macr_book,function(u) {
+                    arr_lab_id.push(data_macr_book[u].atsLab_id);
+                });
+                ats_raw = f_get_general_info_multiple('dt_ats_raw', {}, {atsCert_id:$('#macr_atsCert_id').val(), atsField_id:field_id});
+                $.each(ats_raw,function(u) {
+                    var index_var = jQuery.inArray(ats_raw[u].atsVar_id, arr_var_id);
+                    var index_lab = jQuery.inArray(ats_raw[u].atsLab_id, arr_lab_id);
+                    data_macr_book[index_lab]['a'+index_var] = ats_raw[u].atsRaw_value;
+                });                        
+    //            '<div class="form-group margin-bottom-0" style="width:100%">' +
+    //                '<input type="text" class="form-control" style="width:100%" name="macr_atsRes_a0_'+row.atsLab_code+'" id="macr_atsRes_a0_'+row.atsLab_code+'" value="'+(data!=null?data:'')+'"/>' +
+    //                '</div>'
+                f_dataTable_draw(macr_otable_book, data_macr_book, 'datatable_macr_book', 12);
+                $('.macr_div_workbook2').show();
             }
-            var arr_var_id = [];
-            var arr_lab_id = [];
-            ats_formula_vars = f_get_general_info_multiple('ats_formula_vars', {atsformula_id:$('#macr_atsFormula_id').val()});
-            var th_width = 10 - ats_formula_vars.length + 7;
-            $.each(ats_formula_vars,function(u) {
-                macr_otable_book.columns(u+1).visible(true);
-                $(macr_otable_book.columns(u+1).header()).html(ats_formula_vars[u].atsVar_name);
-                $('#datatable_macr_book thead th:eq(' + (u+1) + ')').width(th_width+'%');
-                arr_var_id.push(ats_formula_vars[u].atsVar_id);
-            });
-            data_macr_book = f_get_general_info_multiple('dt_ats_res_wb', {}, {atsCert_id:$('#macr_atsCert_id').val(), atsRes_cycle:$('#macr_atsCert_cycle').val(), atsField_id:field_id});
-            $.each(data_macr_book,function(u) {
-                arr_lab_id.push(data_macr_book[u].atsLab_id);
-            });
-            ats_raw = f_get_general_info_multiple('dt_ats_raw', {}, {atsCert_id:$('#macr_atsCert_id').val(), atsField_id:field_id});
-            $.each(ats_raw,function(u) {
-                var index_var = jQuery.inArray(ats_raw[u].atsVar_id, arr_var_id);
-                var index_lab = jQuery.inArray(ats_raw[u].atsLab_id, arr_lab_id);
-                data_macr_book[index_lab]['a'+index_var] = ats_raw[u].atsRaw_value;
-            });                        
-//            '<div class="form-group margin-bottom-0" style="width:100%">' +
-//                '<input type="text" class="form-control" style="width:100%" name="macr_atsRes_a0_'+row.atsLab_code+'" id="macr_atsRes_a0_'+row.atsLab_code+'" value="'+(data!=null?data:'')+'"/>' +
-//                '</div>'
-            f_dataTable_draw(macr_otable_book, data_macr_book, 'datatable_macr_book', 12);
-            $('.macr_div_workbook2').show();
         }
     }
             
