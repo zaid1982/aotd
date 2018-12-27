@@ -171,7 +171,7 @@
             if (load_type == 1) {
                 if (!f_submit_normal('create_phy_test', {}, 'p_aotd', '', errMsg_default))   
                     return false;
-                f_flm_table_test();
+                f_plm_table_test();
                 phyTest_id = result_submit;
                 f_mplt_edit(1);
             } else {
