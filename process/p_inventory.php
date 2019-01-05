@@ -24,7 +24,8 @@ try {
     } else {
         Class_db::getInstance()->db_connect();        
         Class_db::getInstance()->db_beginTransaction();
-        $fn_task = new Class_task();          
+        $fn_task = new Class_task();      
+        $fn_upload = new Class_upload();
         if ($_POST['funct'] == 'add_inventory_category') { 
             if (empty($_POST['mvc_inventory_type']))    throw new Exception('(ErrCode:5602) [' . __LINE__ . '] - Field Category Name empty.', 32);
             if (Class_db::getInstance()->db_count('aotd_inventory_type', array('inventory_type'=>$_POST['mvc_inventory_type'])) > 0) 
@@ -59,7 +60,6 @@ try {
             if (empty($_POST['mvi_inventory_type_id']))     throw new Exception('(ErrCode:5602) [' . __LINE__ . '] - Field Category Name empty.', 32);
             if (Class_db::getInstance()->db_count('aotd_inventory', array('item_name'=>$_POST['mvi_item_name'], 'inventory_id'=>'<>'.$_POST['mvi_inventory_id'])) > 0) 
                 throw new Exception('(ErrCode:5603) [' . __LINE__ . '] - Item Name already exist.', 32);            
-            $fn_upload = new Class_upload(); 
             $document_id = $fn_upload->upload_file ('1', $_FILES['mvi_img_file'], 'Inventory image - '.$_POST['mvi_inventory_id'], '4', '', '', $_POST['mvi_inventory_id']);
             $inventory = Class_db::getInstance()->db_select_single('aotd_inventory', array('inventory_id'=>$_POST['mvi_inventory_id']), NULL, 1);
             $result = Class_db::getInstance()->db_update('aotd_inventory', array('item_name'=>$_POST['mvi_item_name'], 'inventory_type_id'=>$_POST['mvi_inventory_type_id'], 'location'=>$_POST['mvi_location'], 'classification'=>$_POST['mvi_classification'],
